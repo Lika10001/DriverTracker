@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DriverTracker.triggers"
+             x:Class="DriverTracker.SighInPage">
+    <StackLayout BackgroundColor="#e6e6e6">
+        <Grid>
+            <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
+                <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0">
+                    <Image Source="main_page_image.jpg" Aspect="AspectFill" Margin="0"/>
+                </Frame>
+            </StackLayout>
+            <StackLayout Padding="0" Margin="10,100,10,0" HorizontalOptions="FillAndExpand">
+                <Frame  BackgroundColor="White" HeightRequest="500" HasShadow="True" Padding="0" Margin="0">
+
+                    <StackLayout>
+                        <StackLayout Margin="10">
+                            <Label Text="SIGN IN" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
+                        </StackLayout>
+
+                        <StackLayout Padding="0" Margin="15,10">
+
+                            <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame BackgroundColor="SkyBlue" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                                        <Image Source="avatar.png" Aspect="AspectFill" Margin="0"/>
+                                    </Frame>
+
+                                    <Entry Placeholder="Login" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                </StackLayout>
+                            </Frame>
+
+                            <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                <StackLayout Orientation="Horizontal">
+                                    <Frame BackgroundColor="SkyBlue" HeightRequest="40" WidthRequest="40" CornerRadius="30" Padding="0" Margin="5">
+                                        <Image Source="lock_icon.jpg" Aspect="AspectFill" Margin="0"/>
+                                    </Frame>
+
+                                    <Entry Placeholder="Password" IsPassword="{Binding Source = {x:Reference ShowPasswordActualTrigger}, Path=HidePassword}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                    <ImageButton HorizontalOptions="End"
+                                                 Source="ic_eye_hide.png">
+                                        <ImageButton.Triggers>
+                                            <EventTrigger Event="Clicked">
+                                                <local:ShowPasswordTriggerAction ShowIcon="ic_eye.png"
+                                                    HideIcon="ic_eye_hide.png"
+                                                    x:Name="ShowPasswordActualTrigger"/>
+                                            </EventTrigger>
+                                        </ImageButton.Triggers>
+                                    </ImageButton>
+                                </StackLayout>
+                            </Frame>
+
+                            <Button Text="SIGN IN" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="15">
+                                <Label Text="Still Not Connected ? " TextColor="DarkGray" FontSize="Small"/>
+                                <Label Text=" Sign Up" TextColor="CadetBlue" FontAttributes="Bold" TextDecorations="Underline" FontSize="Small"/>
+                            </StackLayout>
+                            
+                        </StackLayout>
+                    </StackLayout>
+
+                </Frame>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+
+</ContentPage>
