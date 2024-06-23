@@ -4,6 +4,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DriverTracker.DriverInfoPage">
     <ContentPage.Content>
-        
+        <StackLayout>
+            <Frame  BackgroundColor="White" HeightRequest="500" HasShadow="True" Padding="0" Margin="0">
+                <StackLayout>
+                    <StackLayout Margin="10">
+                        <Label Text="Machine name" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                        <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                            <StackLayout>
+                                <!-- Здест привязка к названию прибора-->
+                                <Label Text="" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                   
+                    <StackLayout Margin="10">
+                        <Label Text="State" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                        <Switch x:Name="Switcher" IsToggled="True"  /> <!-- Toggled="" для привязки обработчика-->
+                    </StackLayout>
+                    
+                   
+                    <StackLayout Margin="10">
+                        <Label Text="Logs" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                    </StackLayout>
+                    
+                    <StackLayout>
+                        <ScrollView>
+                            <!-- Здесь вставить привязку к логам-->
+                            <Label/>
+                        </ScrollView>
+                    </StackLayout>
+                    <StackLayout>
+                        <Button Text="Ok" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
