@@ -17,4 +17,10 @@ public partial class SighInPage : ContentPage
         BindingContext =  viewModel;
         _viewModel = viewModel;
     }
+    
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.LoadUsersAsync();
+    }
 }

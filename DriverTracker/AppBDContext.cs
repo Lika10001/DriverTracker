@@ -1,14 +1,21 @@
 using System.Linq.Expressions;
+using System.Reflection;
 using DriverTracker.Models;
 using SQLite;
 
 namespace DriverTracker;
 
-public class AppBDContext
+public class AppBDContext : IAsyncDisposable
 {
-    private const String DatabaseFileName = "DriverTrackerDB";
-    public SQLiteAsyncConnection Database;
+    private const String DatabaseFileName = "DriverTrackerDB.db";
+    
+    static string projectDirectory = "C:\\Users\\User\\RiderProjects";
+    
+    private static string DbPath => Path.Combine(projectDirectory, "DriverTracker", "DriverTracker", "Resources", "Database", DatabaseFileName);
  
+    private SQLiteAsyncConnection _connection;
+    private SQLiteAsyncConnection Database =>
+        (_connection = new SQLiteAsyncConnection(DbPath));
      private async Task CreateTableIfNotExists<TTable>() where TTable : class, new()
         {
             await Database.CreateTableAsync<TTable>();
@@ -16,7 +23,7 @@ public class AppBDContext
 
         private async Task<AsyncTableQuery<TTable>> GetTableAsync<TTable>() where TTable : class, new()
         {
-            await CreateTableIfNotExists<TTable>();
+            //await CreateTableIfNotExists<TTable>();
             return Database.Table<TTable>();
         }
 
@@ -34,7 +41,7 @@ public class AppBDContext
 
         private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new()
         {
-            await CreateTableIfNotExists<TTable>();
+           // await CreateTableIfNotExists<TTable>();
             return await action();
         }
 
@@ -69,4 +76,6 @@ public class AppBDContext
             await CreateTableIfNotExists<TTable>();
             return await Database.DeleteAsync<TTable>(primaryKey) > 0;
         }
+        
+        public async ValueTask DisposeAsync() => await _connection?.CloseAsync();
 }
