@@ -41,7 +41,7 @@ public partial class SighInViewModel: ObservableObject
     
     [RelayCommand]
     private async Task NavigateAsync(){
-        if (Validator.CheckLogin(UserName) && Validator.CheckPassword(UserPassword)) {
+        if (Validator.IsLoginValid(UserName) && Validator.IsPasswordValid(UserPassword)) {
             
             if (_users.Any(p=>p.user_login == _userName && p.user_password == _userPassword))
             {

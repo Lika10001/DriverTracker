@@ -14,6 +14,7 @@ public partial class SighUpPage : ContentPage
     {
         InitializeComponent();
         BindingContext = new SighUpPageViewModel();
-       // _viewModel = viewModel;
+       //BindingContext = viewModel;
+        //_viewModel = viewModel;
     }
 }

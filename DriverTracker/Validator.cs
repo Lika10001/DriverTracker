@@ -6,13 +6,14 @@ public static class Validator
     private const int PasswordLength = 1;
     private const int LoginLength = 1;
         
-    public static bool CheckPassword(string data)
+    public static bool IsPasswordValid(string data)
     {
         return ((data.Length > PasswordLength) && (!string.IsNullOrWhiteSpace(data)));
     }
     
-    public static bool CheckLogin(string data)
+    public static bool IsLoginValid(string data)
     {
         return ((data.Length > LoginLength) && (!string.IsNullOrWhiteSpace(data)));
     }
+    
 }

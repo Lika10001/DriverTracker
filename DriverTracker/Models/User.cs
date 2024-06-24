@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using SQLite;
 
 namespace DriverTracker.Models;
@@ -9,4 +10,10 @@ public class User
     public string user_login { get; set; }
     public string user_password { get; set; }
     public string user_name { get; set; }
+    
+    public bool IsUserDataNull()
+    {
+        return ((user_login == null) && (user_password == null) && (user_name == null));
+    }
+
 }
