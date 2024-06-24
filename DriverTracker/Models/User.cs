@@ -4,9 +4,8 @@ namespace DriverTracker.Models;
 
 public class User
 {
-    [PrimaryKey, AutoIncrement]
-    public int UserId { get; set; }
-    public String UserName { get; set; }
-    public String UserLogin { get; set; }
-    public String UserPassword { get; set; }
+    [PrimaryKey, AutoIncrement] public int UserId { get; set; }
+    public string UserName { get; set; }
+    public string UserLogin { get; set; }
+    public string UserPassword { get; set; }
 }

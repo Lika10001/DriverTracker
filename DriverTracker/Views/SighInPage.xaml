@@ -1,9 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:DriverTracker.triggers"
-             x:Class="DriverTracker.SighInPage">
-    <StackLayout BackgroundColor="#e6e6e6">
+             xmlns:vm="clr-namespace:DriverTracker.ViewModels"
+             x:Class="DriverTracker.Views.SighInPage">
+   
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="#e6e6e6">
         <Grid>
             <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
                 <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0">
@@ -26,7 +30,7 @@
                                         <Image Source="avatar.png" Aspect="AspectFill" Margin="0"/>
                                     </Frame>
 
-                                    <Entry Placeholder="Login" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                    <Entry Placeholder="Login" Text="{Binding  Source={RelativeSource AncestorType={x:Type vm:SighInViewModel}}, Path=UserName}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
                                 </StackLayout>
                             </Frame>
 
@@ -36,7 +40,7 @@
                                         <Image Source="lock_icon.jpg" Aspect="AspectFill" Margin="0"/>
                                     </Frame>
 
-                                    <Entry Placeholder="Password" IsPassword="{Binding Source = {x:Reference ShowPasswordActualTrigger}, Path=HidePassword}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                    <Entry Placeholder="Password" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighInViewModel}}, Path= UserPassword}" IsPassword="{Binding Source = {x:Reference ShowPasswordActualTrigger}, Path=HidePassword}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
                                     <ImageButton HorizontalOptions="End"
                                                  Source="ic_eye_hide.png">
                                         <ImageButton.Triggers>
@@ -50,10 +54,10 @@
                                 </StackLayout>
                             </Frame>
 
-                            <Button Text="SIGN IN" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="15">
-                                <Label Text="Still Not Connected ? " TextColor="DarkGray" FontSize="Small"/>
-                                <Label Text=" Sign Up" TextColor="CadetBlue" FontAttributes="Bold" TextDecorations="Underline" FontSize="Small"/>
+                            <Button Text="SIGN IN" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighInViewModel}}, Path=NavigateCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                               <Label Text="Still Not Connected ? " TextColor="DarkGray" FontSize="Small" Padding="15"/>
+                               <Button Text="Sign Up" TextColor="CadetBlue"  BackgroundColor="White" FontAttributes="Bold" FontSize="Small" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighInViewModel}}, Path=NavigateToSighUpCommand}" />
                             </StackLayout>
                             
                         </StackLayout>
@@ -63,5 +67,5 @@
             </StackLayout>
         </Grid>
     </StackLayout>
-
+    </ContentPage.Content>
 </ContentPage>

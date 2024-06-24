@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DriverTracker.ViewModels;
+using DriverTracker.Views;
+using Microsoft.Extensions.Logging;
 
 namespace DriverTracker;
 
@@ -8,16 +10,25 @@ public static class MauiProgramExtensions
     {
         builder
             .UseMauiApp<App>()
+            //.UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+       
+        
 
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
         builder.Services.AddSingleton<AppBDContext>();
+        builder.Services.AddSingleton<SighInPage>();
+        builder.Services.AddSingleton<SighUpPage>();
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<SighInViewModel>();
+        builder.Services.AddSingleton<DriverInfoPage>();
+        builder.Services.AddSingleton<AddDriverPage>();
         return builder;
     }
 }

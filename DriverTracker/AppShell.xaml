@@ -4,11 +4,11 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:DriverTracker"
+    xmlns:views="clr-namespace:DriverTracker.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="DriverTracker">
 
     <ShellContent
-        ContentTemplate="{DataTemplate local:SighInPage}"
-        Route="MainPage" />
-
+        ContentTemplate="{DataTemplate views:SighInPage}"
+        Route="SighInPage" />
 </Shell>

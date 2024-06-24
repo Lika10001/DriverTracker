@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DriverTracker.ViewModels"
+             x:Class="DriverTracker.Views.SighUpPage">
+    
+    <ContentPage.Content>
+        
+        <StackLayout BackgroundColor="#e6e6e6">
+            <Grid>
+                <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
+                    <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0"/>
+                </StackLayout>
+                <StackLayout Padding="0" Margin="10,100,10,0" HorizontalOptions="FillAndExpand">
+                    <Frame  BackgroundColor="White" HeightRequest="500" HasShadow="True" Padding="0" Margin="0">
+
+                        <StackLayout>
+                            <StackLayout Margin="10">
+                                <Label Text="SIGN UP" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
+                            </StackLayout>
+
+                            <ScrollView>
+                                <StackLayout>
+
+                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Login:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                            <Entry Placeholder="Login" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                        </StackLayout>
+                                    </Frame>
+
+                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Name:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                            <Entry Placeholder="Name" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                            </StackLayout>
+                                    </Frame>
+                                    
+                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Password:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                            <Entry Placeholder="Password" IsPassword = "True" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                        </StackLayout>
+                                    </Frame>
+                                    
+                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Confirm password:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                            <Entry Placeholder="Confirm password" IsPassword = "True" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                        </StackLayout>
+                                    </Frame>
+
+                                   <Button Text="SIGN UP" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="15">
+                                       <Label Text="Already have an account ? " TextColor="DarkGray" FontSize="Small"/>
+                                    
+                                       <Label Text=" Sign In"  TextColor="CadetBlue" FontAttributes="Bold" TextDecorations="Underline" FontSize="Small"/>
+                                       <Button Text="Sign In" TextColor="CadetBlue"  BackgroundColor="White" FontAttributes="Bold" FontSize="Small" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NavigateToSighInCommand}" />
+                                    </StackLayout>
+                                    
+                                </StackLayout>
+                            </ScrollView>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
