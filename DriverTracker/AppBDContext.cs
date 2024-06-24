@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using DriverTracker.Models;
 using SQLite;
 
@@ -7,23 +8,65 @@ public class AppBDContext
 {
     private const String DatabaseFileName = "DriverTrackerDB";
     public SQLiteAsyncConnection Database;
-
-    public async Task<List<User>> GetAllUsersAsync()
-    {
-        return await Database.Table<User>().ToListAsync();
-    }
-
-    public async Task<User> GetUserByIdAsync(int userId)
-    {
-        return await Database.Table<User>().Where(p=> p.UserId == userId).FirstOrDefaultAsync();
-    }
-
-    public async Task<int> AddUserAsync(User newUser)
-    {
-        if (newUser.UserId != 0)
+ 
+     private async Task CreateTableIfNotExists<TTable>() where TTable : class, new()
         {
-            return await Database.UpdateAsync(newUser);
+            await Database.CreateTableAsync<TTable>();
         }
-        return await Database.InsertAsync(newUser);
-    }
+
+        private async Task<AsyncTableQuery<TTable>> GetTableAsync<TTable>() where TTable : class, new()
+        {
+            await CreateTableIfNotExists<TTable>();
+            return Database.Table<TTable>();
+        }
+
+        public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new()
+        {
+            var table = await GetTableAsync<TTable>();
+            return await table.ToListAsync();
+        }
+
+        public async Task<IEnumerable<TTable>> GetFileteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new()
+        {
+            var table = await GetTableAsync<TTable>();
+            return await table.Where(predicate).ToListAsync();
+        }
+
+        private async Task<TResult> Execute<TTable, TResult>(Func<Task<TResult>> action) where TTable : class, new()
+        {
+            await CreateTableIfNotExists<TTable>();
+            return await action();
+        }
+
+        public async Task<TTable> GetItemByKeyAsync<TTable>(object primaryKey) where TTable : class, new()
+        {
+            //await CreateTableIfNotExists<TTable>();
+            //return await Database.GetAsync<TTable>(primaryKey);
+            return await Execute<TTable, TTable>(async () => await Database.GetAsync<TTable>(primaryKey));
+        }
+
+        public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new()
+        {
+            //await CreateTableIfNotExists<TTable>();
+            //return await Database.InsertAsync(item) > 0;
+            return await Execute<TTable, bool>(async () => await Database.InsertAsync(item) > 0);
+        }
+
+        public async Task<bool> UpdateItemAsync<TTable>(TTable item) where TTable : class, new()
+        {
+            await CreateTableIfNotExists<TTable>();
+            return await Database.UpdateAsync(item) > 0;
+        }
+
+        public async Task<bool> DeleteItemAsync<TTable>(TTable item) where TTable : class, new()
+        {
+            await CreateTableIfNotExists<TTable>();
+            return await Database.DeleteAsync(item) > 0;
+        }
+
+        public async Task<bool> DeleteItemByKeyAsync<TTable>(object primaryKey) where TTable : class, new()
+        {
+            await CreateTableIfNotExists<TTable>();
+            return await Database.DeleteAsync<TTable>(primaryKey) > 0;
+        }
 }
