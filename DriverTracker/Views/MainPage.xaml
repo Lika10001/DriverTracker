@@ -5,7 +5,13 @@
              xmlns:vm="clr-namespace:DriverTracker.ViewModels"
              xmlns:models="clr-namespace:DriverTracker.Models"
              xmlns:compatibility="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls"
+             xmlns:classes="clr-namespace:DriverTracker.Classes"
              x:Class="DriverTracker.Views.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <classes:IntToBooleanConverter x:Key="statusConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <StackLayout>
@@ -48,7 +54,7 @@
                                                 <StackLayout Padding="30">
                                                     <!--Toggled="switcher_Toggled"-->
                                                     <Switch x:Name="switcher" OnColor="Green" WidthRequest="100"
-                                                            HeightRequest="50" IsToggled="True"/>
+                                                            HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource statusConverter}}"/>
                                                 </StackLayout>
                                                 </HorizontalStackLayout>
                                         </Frame>
