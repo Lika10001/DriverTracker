@@ -2,18 +2,67 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DriverTracker.ViewModels"
+             xmlns:models="clr-namespace:DriverTracker.Models"
+             xmlns:compatibility="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls"
              x:Class="DriverTracker.Views.MainPage">
     <ContentPage.Content>
         <StackLayout>
             <StackLayout>
-                <ListView>
-                    <!-- В каждом элементе должен отображаться статус прибора и кнопка подробнее-->
-                </ListView>
+                <Label Text="Devices" FontSize= "26" TextColor="CadetBlue" FontAttributes="Bold" Margin="20"/>
             </StackLayout>
-           
+            <Grid>
+                <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
+                    <Frame HeightRequest="500" BackgroundColor="CadetBlue" Padding="0" Margin="0">
+                        <Image Source="main_devices.jpg" Aspect="AspectFill" Margin="0"/>
+                    </Frame>
+                </StackLayout>
+                <StackLayout>
+                    <!-- SelectionChanged="productsCollection_SelectionChanged"-->
+                    <CollectionView x:Name="DevicesCollection"
+                                    ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=Devices}"
+                                    Margin="10"
+                                    SelectionMode="Single"
+                                  
+                    >
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="20" />
+                        </CollectionView.ItemsLayout>
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Device">
+                                <VerticalStackLayout>
+                                    <HorizontalStackLayout>
+                                        <Frame BackgroundColor="White" HeightRequest="100" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="50">
+                                            <HorizontalStackLayout>
+                                                <StackLayout>
+                                                    <Image 
+                                                        Aspect="AspectFill"
+                                                        HeightRequest="100"
+                                                        Source="one_device.jpg"
+                                                        WidthRequest="100" />
+                                                    <StackLayout>
+                                                </StackLayout>
+                                                </StackLayout>
+                                                    <Label Text="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_name}" FontSize= "22" TextColor="CadetBlue" FontAttributes="Bold" Padding="35"/>
+                                                <StackLayout Padding="30">
+                                                    <!--Toggled="switcher_Toggled"-->
+                                                    <Switch x:Name="switcher" OnColor="Green" WidthRequest="100"
+                                                            HeightRequest="50" IsToggled="True"/>
+                                                </StackLayout>
+                                                </HorizontalStackLayout>
+                                        </Frame>
+                                    </HorizontalStackLayout>
+                                 </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+          </Grid>
             <StackLayout>
                 <!-- Название для кнопки может меняться-->
-                <Button Text="Add Machine" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                <Button Text="Add Device" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                <Button Text="Add Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

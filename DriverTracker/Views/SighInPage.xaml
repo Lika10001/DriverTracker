@@ -10,12 +10,12 @@
         <StackLayout BackgroundColor="#e6e6e6">
         <Grid>
             <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
-                <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0">
-                    <Image Source="main_page_image.jpg" Aspect="AspectFill" Margin="0"/>
+                <Frame HeightRequest="700" BackgroundColor="CadetBlue" Padding="0" Margin="0">
+                    <Image Source="main_devices.jpg" Aspect="AspectFill" Margin="0"/>
                 </Frame>
             </StackLayout>
             <StackLayout Padding="0" Margin="10,100,10,0" HorizontalOptions="FillAndExpand">
-                <Frame  BackgroundColor="White" HeightRequest="500" HasShadow="True" Padding="0" Margin="0">
+                <Frame  BackgroundColor="White" HeightRequest="300" HasShadow="True" Padding="0" Margin="0">
 
                     <StackLayout>
                         <StackLayout Margin="10">
