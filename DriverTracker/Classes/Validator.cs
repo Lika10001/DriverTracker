@@ -1,4 +1,4 @@
-namespace DriverTracker;
+namespace DriverTracker.Classes;
 //this class validates data according to its type.
 //Methods return true, if data is correct, false - data is not correct.  
 public static class Validator
