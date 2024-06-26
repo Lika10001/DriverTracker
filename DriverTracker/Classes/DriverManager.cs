@@ -29,7 +29,13 @@ public class DriverManager
     {
         try
         {
-            var process = Process.Start(filePath);
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = filePath,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            var process = Process.Start(startInfo);
             _runningProcesses.Add(Path.GetFileNameWithoutExtension(filePath), process);
             Console.WriteLine($"Started {Path.GetFileName(filePath)}");
         }
@@ -69,7 +75,13 @@ public class DriverManager
         {
             try
             {
-                var process = Process.Start(exeFilePath);
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = exeFilePath,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                var process = Process.Start(startInfo);
                 _runningProcesses.Add(exeName, process);
                 Console.WriteLine($"Started {exeName}.exe");
             }

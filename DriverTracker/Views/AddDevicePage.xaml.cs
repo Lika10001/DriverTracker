@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DriverTracker;
+namespace DriverTracker.Views;
 
-public partial class AddDriverPage : ContentPage
+public partial class AddDevicePage : ContentPage
 {
-    public AddDriverPage()
+    public AddDevicePage()
     {
         InitializeComponent();
     }

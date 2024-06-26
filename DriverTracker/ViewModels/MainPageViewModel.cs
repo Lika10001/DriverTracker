@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using DriverTracker.Classes;
 using DriverTracker.Models;
+using DriverTracker.Views;
 using Device = DriverTracker.Models.Device;
 
 namespace DriverTracker.ViewModels;
@@ -15,8 +17,8 @@ public partial class MainPageViewModel : ObservableObject
 
     public MainPageViewModel()
     {
-        LoadDevicesAsync();
-        LoadDriversFromBD();
+        _ = LoadDevicesAsync();
+        _ = LoadDriversFromBD();
     }
 
     private static string GetCorrectPath()
@@ -31,6 +33,51 @@ public partial class MainPageViewModel : ObservableObject
         }
 
         return Path.Combine(substringToEndingWord, @"Resources\Drivers");
+    }
+
+    [RelayCommand]
+    public async Task StopAllDrivers()
+    {
+       
+            Device currDevice = new();
+            DriverManager driverManager = new(GetCorrectPath());
+            foreach (var device in _devices)
+            {
+                if (device.device_status == 1)
+                {
+                    try
+                    {
+                        driverManager.StopDriverByName(
+                            (_drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id)).driver_name);
+                        currDevice.device_id = device.device_id;
+                        currDevice.device_name = device.device_name;
+                        currDevice.device_status = 0;
+                        currDevice.device_driver_id = device.device_driver_id;
+                        await UpdateDeviceStatusAsync(currDevice);
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception();
+                    }
+                    
+                }
+            }    
+    }
+
+    [RelayCommand]
+    public async Task GoToDetailsPage(Device device)
+    {
+        if (device == null)
+        {
+            await Shell.Current.DisplayAlert("Details error", "No details found about this device", "Ok");
+        }
+        else
+        {
+            await Shell.Current.GoToAsync(nameof(DeviceDetailsPage), true, new Dictionary<string, object>
+            {
+                {"Device", device }
+            });
+        }
     }
     
     public async Task LoadDriversFromBD()
@@ -50,7 +97,7 @@ public partial class MainPageViewModel : ObservableObject
         });
         
     }
-    
+    [RelayCommand]
     public async Task RunDriversForDevices()
     {
         await ExecuteAsync(async () =>
@@ -60,28 +107,31 @@ public partial class MainPageViewModel : ObservableObject
             DriverManager driverManager = new(PathToDrivers);
             foreach (var device in _devices)
             {
-                try
-                {
-                    var driver = _drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
-                    if (driver != null)
+                if (device.device_status == 0){
+                    try
                     {
-                        driverManager.StartDriverByName(driver.driver_name);
-                        currDevice.device_status = 1;
-                    }
-                    else
-                    {
-                        currDevice.device_status = 0;
-                      
-                    }
+                        var driver =
+                            _drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
+                        if (driver != null)
+                        {
+                            driverManager.StartDriverByName(driver.driver_name);
+                            currDevice.device_status = 1;
+                        }
+                        else
+                        {
+                            currDevice.device_status = 0;
 
-                    currDevice.device_driver_id = device.device_driver_id;
-                    currDevice.device_id = device.device_id;
-                    currDevice.device_name = device.device_name;
-                    await UpdateDeviceStatusAsync(currDevice);
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
+                        }
+
+                        currDevice.device_driver_id = device.device_driver_id;
+                        currDevice.device_id = device.device_id;
+                        currDevice.device_name = device.device_name;
+                        await UpdateDeviceStatusAsync(currDevice);
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception();
+                    }
                 }
             }
         });
@@ -114,7 +164,7 @@ public partial class MainPageViewModel : ObservableObject
                 {
                     var deviceCopy = device.Clone();
 
-                    var index = _devices.IndexOf(device);
+                    var index = Devices.IndexOf(device);
                     _devices.RemoveAt(index);
 
                     _devices.Insert(index, deviceCopy);
@@ -123,8 +173,8 @@ public partial class MainPageViewModel : ObservableObject
                 {
                     await Shell.Current.DisplayAlert("Error", "Device status update error", "Ok");
                     return;
-                 }
-        });
+                }
+       });
     }
     
     private async Task ExecuteAsync(Func<Task> operation, string? busyText = null)
@@ -144,6 +194,12 @@ public partial class MainPageViewModel : ObservableObject
             //IsBusy = false;
             //BusyText = "Processing...";
         }
+    }
+
+    [RelayCommand]
+    public async Task NavigateToAddDeviceAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(AddDevicePage), true);
     }
     
 }

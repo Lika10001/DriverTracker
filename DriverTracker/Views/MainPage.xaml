@@ -40,6 +40,11 @@
                                 <VerticalStackLayout>
                                     <HorizontalStackLayout>
                                         <Frame BackgroundColor="White" HeightRequest="100" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="50">
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GoToDetailsPageCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                            </Frame.GestureRecognizers>
                                             <HorizontalStackLayout>
                                                 <StackLayout>
                                                     <Image 
@@ -65,11 +70,12 @@
                     </CollectionView>
                 </StackLayout>
           </Grid>
-            <StackLayout>
-                <!-- Название для кнопки может меняться-->
-                <Button Text="Add Device" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                <Button Text="Add Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-            </StackLayout>
+            <HorizontalStackLayout>
+                <Button Text="Add New Device" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToAddDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+               <!-- <Button Text="Add New Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />-->
+                <Button Text="Run All Devices"   Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=RunDriversForDevicesCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                <Button Text="Stop All Devices" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=StopAllDriversCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+            </HorizontalStackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

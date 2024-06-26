@@ -27,8 +27,11 @@ public static class MauiProgramExtensions
         builder.Services.AddSingleton<SighUpPage>();
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<SighInViewModel>();
-        builder.Services.AddSingleton<DriverInfoPage>();
-        builder.Services.AddSingleton<AddDriverPage>();
+        builder.Services.AddSingleton<SighUpPageViewModel>();
+        builder.Services.AddSingleton<MainPageViewModel>();
+        builder.Services.AddSingleton<AddDevicePage>();
+        builder.Services.AddSingleton<DeviceDetailsPage>();
+        builder.Services.AddSingleton<DeviceDetailsViewModel>();
         return builder;
     }
 }

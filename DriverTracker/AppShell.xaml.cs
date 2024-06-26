@@ -12,7 +12,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
         Routing.RegisterRoute(nameof(SighUpPage), typeof(SighUpPage));
         //Routing.RegisterRoute(nameof(SighInPage), typeof(SighInPage));
-        Routing.RegisterRoute(nameof(DriverInfoPage), typeof(DriverInfoPage));
-        Routing.RegisterRoute(nameof(AddDriverPage), typeof(AddDriverPage));
+        Routing.RegisterRoute(nameof(DeviceDetailsPage), typeof(DeviceDetailsPage));
+        Routing.RegisterRoute(nameof(AddDevicePage), typeof(AddDevicePage));
     }
 }
