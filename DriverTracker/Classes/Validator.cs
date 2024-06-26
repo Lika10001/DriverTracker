@@ -5,8 +5,8 @@ public static class Validator
 {
     private const int PasswordLength = 3;
     private const int LoginLength = 3;
-    private const int PortNumberLength = 5;
     private const int MaxPortValue = 65535;
+    private const int MinPortValue = 0;
         
     public static bool IsPasswordValid(string data)
     {
@@ -29,7 +29,7 @@ public static class Validator
             return false;
         }
 
-        return ((data.Length > PasswordLength) && (Convert.ToInt32(data) <= MaxPortValue));
+        return ((Convert.ToInt32(data) <= MaxPortValue) &&(Convert.ToInt32(data) >= MinPortValue));
     }
     
     public static bool IsIPValid(string data)

@@ -198,35 +198,11 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
-    private List<string> GetDriverNamesFromCollection()
-    {
-        var dictionary = new List<string>();
-        foreach (var driver in _drivers)
-        {
-            dictionary.Add(driver.driver_name);
-        }
-
-        return dictionary;
-    }
-
+    
     [RelayCommand]
     public async Task NavigateToAddDeviceAsync()
     {
-        if (_drivers != null)
-        {
-            var list = GetDriverNamesFromCollection();
-            ObservableCollection <Driver> driversForAddPage= new();
-            foreach (var item in _drivers)
-            {
-                driversForAddPage.Add(item);
-            }
-            await Shell.Current.GoToAsync(nameof(AddDevicePage), true,
-                new Dictionary<string, object>
-                {
-                    { "Drivers", driversForAddPage },
-                    { "DriverNames", list }
-                });
-        }
+        await Shell.Current.GoToAsync(nameof(AddDevicePage), true);
     }
     
 }

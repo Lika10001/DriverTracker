@@ -15,4 +15,9 @@ public partial class AddDevicePage : ContentPage
         InitializeComponent();
         BindingContext = _viewModel;
     }
+
+    protected override void OnAppearing()
+    {
+        _viewModel.LoadDriversAsync();
+    }
 }

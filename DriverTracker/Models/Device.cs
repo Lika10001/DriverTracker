@@ -11,7 +11,13 @@ public class Device
     
     public bool IsDeviceDataNull()
     {
-        return (device_name == null && device_driver_id == null && device_status == null);
+        return (device_name == null || device_driver_id == null || device_status == null
+                || string.IsNullOrWhiteSpace(device_name));
+    }
+
+    public bool IsDeviceNameNull()
+    {
+        return (device_name == null || string.IsNullOrWhiteSpace(device_name));
     }
     
     public Device Clone() => MemberwiseClone() as Device;
