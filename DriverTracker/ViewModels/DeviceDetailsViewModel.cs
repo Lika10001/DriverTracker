@@ -18,4 +18,6 @@ public partial class DeviceDetailsViewModel:ObservableObject
     {
         await Shell.Current.GoToAsync(nameof(MainPage), true);
     }
+
+    
 }

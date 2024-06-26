@@ -28,7 +28,7 @@ public partial class SighUpPageViewModel:ObservableObject
     [RelayCommand]
     private async Task SaveUserAsync()
     {
-        LoadUsersAsync();
+        await LoadUsersAsync();
 
         if (_newUser.IsUserDataNull())
         {

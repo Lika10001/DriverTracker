@@ -32,6 +32,7 @@ public static class MauiProgramExtensions
         builder.Services.AddSingleton<AddDevicePage>();
         builder.Services.AddSingleton<DeviceDetailsPage>();
         builder.Services.AddSingleton<DeviceDetailsViewModel>();
+        builder.Services.AddSingleton<AddDeviceViewModel>();
         return builder;
     }
 }

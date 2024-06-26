@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DriverTracker.Classes;
@@ -137,8 +138,6 @@ public partial class MainPageViewModel : ObservableObject
         });
     }
     
-    
-    
     public async Task LoadDevicesAsync()
     {
         await ExecuteAsync(async () =>
@@ -199,10 +198,30 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
+    private List<string> GetDriverNamesFromCollection()
+    {
+        var dictionary = new List<string>();
+        foreach (var driver in _drivers)
+        {
+            dictionary.Add(driver.driver_name);
+        }
+
+        return dictionary;
+    }
+
     [RelayCommand]
     public async Task NavigateToAddDeviceAsync()
     {
-        await Shell.Current.GoToAsync(nameof(AddDevicePage), true);
+        if (_drivers != null)
+        {
+            var list = GetDriverNamesFromCollection();
+            await Shell.Current.GoToAsync(nameof(AddDevicePage), true,
+                new Dictionary<string, object>
+                {
+                    { "Drivers", _drivers },
+                    { "DriverNames", list }
+                });
+        }
     }
     
 }

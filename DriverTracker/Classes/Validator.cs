@@ -16,4 +16,20 @@ public static class Validator
         return ((data.Length > LoginLength) && (!string.IsNullOrWhiteSpace(data)));
     }
     
+    public static bool IsPortValid(string data)
+    {
+        return ((data.Length > PasswordLength) && (!string.IsNullOrWhiteSpace(data)));
+    }
+    
+    public static bool IsIPValid(string data)
+    {
+        return ((data.Length > LoginLength) && (!string.IsNullOrWhiteSpace(data)));
+    }
+    
+    public static bool IsDeviceFieldValid(string data)
+    {
+        return ((data.Length > PasswordLength) && (!string.IsNullOrWhiteSpace(data)));
+    }
+    
+    
 }
