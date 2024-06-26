@@ -14,13 +14,7 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
   
     private readonly AppBDContext _context = new ();
-
-    public MainPageViewModel()
-    {
-        _ = LoadDevicesAsync();
-        _ = LoadDriversFromBD();
-    }
-
+    
     private static string GetCorrectPath()
     {
         var location = AppDomain.CurrentDomain.BaseDirectory;
@@ -93,7 +87,10 @@ public partial class MainPageViewModel : ObservableObject
                 _drivers ??= new ObservableCollection<Driver>();
                 foreach (var driver in drivers)
                 {
-                    _drivers.Add(driver);
+                    if (_drivers.FirstOrDefault(p=>p.driver_id == driver.driver_id) == null)
+                    {
+                        _drivers.Add(driver);
+                    }
                 }
             }
             await RunDriversForDevices();
@@ -152,7 +149,10 @@ public partial class MainPageViewModel : ObservableObject
                 _devices ??= new ObservableCollection<Device>();
                 foreach (var device in devices)
                 {
-                    _devices.Add(device);
+                    if (_devices.FirstOrDefault(p=>p.device_id == device.device_id) == null)
+                    {
+                        _devices.Add(device);
+                    }
                 }
             }
         });
