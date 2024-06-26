@@ -1,11 +1,16 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DriverTracker.Views;
+using DriverTracker.Models;
+using Device = DriverTracker.Models.Device;
 
 namespace DriverTracker.ViewModels;
 
+[QueryProperty(nameof(Models.Device), "Device")]
 public partial class DeviceDetailsViewModel:ObservableObject
 {
+    [ObservableProperty] private Device _device;
+    
     [RelayCommand]
     public async Task GoBackToMainPage()
     {

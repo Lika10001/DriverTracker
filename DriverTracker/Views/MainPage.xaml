@@ -70,12 +70,12 @@
                     </CollectionView>
                 </StackLayout>
           </Grid>
-            <HorizontalStackLayout>
-                <Button Text="Add New Device" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToAddDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-               <!-- <Button Text="Add New Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />-->
-                <Button Text="Run All Devices"   Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=RunDriversForDevicesCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                <Button Text="Stop All Devices" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=StopAllDriversCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-            </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Button Text="Add New Device" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToAddDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                    <!-- <Button Text="Add New Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />-->
+                    <Button Text="Run All Devices"   Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=RunDriversForDevicesCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                    <Button Text="Stop All Devices" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=StopAllDriversCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                </HorizontalStackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

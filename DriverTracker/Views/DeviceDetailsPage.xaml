@@ -3,7 +3,13 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DriverTracker.ViewModels"
+             xmlns:classes="clr-namespace:DriverTracker.Classes"
              x:Class="DriverTracker.Views.DeviceDetailsPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <classes:IntToBooleanConverter x:Key="statusConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <Frame  BackgroundColor="White" HeightRequest="500" HasShadow="True" Padding="0" Margin="0">
@@ -12,15 +18,14 @@
                         <Label Text="Machine name" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                         <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
                             <StackLayout>
-                                <!-- Здест привязка к названию прибора-->
-                                <Label Text="" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_name}" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                             </StackLayout>
                         </Frame>
                     </StackLayout>
                    
                     <StackLayout Margin="10">
-                        <Label Text="State" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                        <Switch x:Name="Switcher" IsToggled="True"  /> <!-- Toggled="" для привязки обработчика-->
+                        <Label Text="Is device on" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                        <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_status, Converter={StaticResource statusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                     </StackLayout>
                     
                    
