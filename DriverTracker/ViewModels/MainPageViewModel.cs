@@ -215,10 +215,15 @@ public partial class MainPageViewModel : ObservableObject
         if (_drivers != null)
         {
             var list = GetDriverNamesFromCollection();
+            ObservableCollection <Driver> driversForAddPage= new();
+            foreach (var item in _drivers)
+            {
+                driversForAddPage.Add(item);
+            }
             await Shell.Current.GoToAsync(nameof(AddDevicePage), true,
                 new Dictionary<string, object>
                 {
-                    { "Drivers", _drivers },
+                    { "Drivers", driversForAddPage },
                     { "DriverNames", list }
                 });
         }

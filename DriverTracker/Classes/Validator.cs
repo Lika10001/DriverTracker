@@ -3,8 +3,10 @@ namespace DriverTracker.Classes;
 //Methods return true, if data is correct, false - data is not correct.  
 public static class Validator
 {
-    private const int PasswordLength = 1;
-    private const int LoginLength = 1;
+    private const int PasswordLength = 3;
+    private const int LoginLength = 3;
+    private const int PortNumberLength = 5;
+    private const int MaxPortValue = 65535;
         
     public static bool IsPasswordValid(string data)
     {
@@ -18,14 +20,41 @@ public static class Validator
     
     public static bool IsPortValid(string data)
     {
-        return ((data.Length > PasswordLength) && (!string.IsNullOrWhiteSpace(data)));
+        try
+        {
+            int value = Convert.ToInt32(data);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return ((data.Length > PasswordLength) && (Convert.ToInt32(data) <= MaxPortValue));
     }
     
     public static bool IsIPValid(string data)
     {
-        return ((data.Length > LoginLength) && (!string.IsNullOrWhiteSpace(data)));
+        if (!data.Contains('.') && !data.Contains(':'))
+            return false;
+
+        return (data.Contains(':') != true && IsValidIPv4Address(data));
     }
-    
+
+    private static bool IsValidIPv4Address(string ipAddress)
+    {
+        string[] octets = ipAddress.Split('.');
+        if (octets.Length != 4)
+            return false;
+        foreach (string octet in octets)
+        {
+            if (!int.TryParse(octet, out int value))
+                return false;
+            if (value < 0 || value > 255)
+                return false;
+        }
+        return true;
+    }
+        
     public static bool IsDeviceFieldValid(string data)
     {
         return ((data.Length > PasswordLength) && (!string.IsNullOrWhiteSpace(data)));
