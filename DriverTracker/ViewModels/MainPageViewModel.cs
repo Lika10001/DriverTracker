@@ -67,7 +67,9 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     public async Task GoToDetailsPage(Device device)
     {
-        if (device == null)
+        Driver currDeviceDriver = new Driver();
+        currDeviceDriver = _drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
+        if (device == null || currDeviceDriver == null)
         {
             await Shell.Current.DisplayAlert("Details error", "No details found about this device", "Ok");
         }
@@ -75,7 +77,8 @@ public partial class MainPageViewModel : ObservableObject
         {
             await Shell.Current.GoToAsync(nameof(DeviceDetailsPage), true, new Dictionary<string, object>
             {
-                {"Device", device }
+                {"Device", device },
+                {"Driver", currDeviceDriver}
             });
         }
     }

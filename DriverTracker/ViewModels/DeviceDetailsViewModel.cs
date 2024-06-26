@@ -7,9 +7,11 @@ using Device = DriverTracker.Models.Device;
 namespace DriverTracker.ViewModels;
 
 [QueryProperty(nameof(Models.Device), "Device")]
+[QueryProperty(nameof(Models.Driver), "Driver")]
 public partial class DeviceDetailsViewModel:ObservableObject
 {
     [ObservableProperty] private Device _device;
+    [ObservableProperty] private Driver _driver;
     
     [RelayCommand]
     public async Task GoBackToMainPage()
