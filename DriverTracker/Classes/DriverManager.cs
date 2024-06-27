@@ -2,20 +2,13 @@ using System.Diagnostics;
 
 namespace DriverTracker.Classes;
 
-public class DriverManager
+public class DriverManager(string exeFolderPath)
 {
-    private readonly string _exeFolderPath;
-    private readonly Dictionary<string, Process> _runningProcesses;
-
-    public DriverManager(string exeFolderPath)
-    {
-        _exeFolderPath = exeFolderPath;
-        _runningProcesses = new Dictionary<string, Process>();
-    }
+    private readonly Dictionary<string, Process> _runningProcesses = new();
 
     public void StartAllDrivers()
     {
-        var files = Directory.GetFiles(_exeFolderPath, "*.exe");
+        var files = Directory.GetFiles(exeFolderPath, "*.exe");
         Parallel.ForEach(files, StartDriver);
     }
 
@@ -36,7 +29,7 @@ public class DriverManager
                 CreateNoWindow = true
             };
             var process = Process.Start(startInfo);
-            _runningProcesses.Add(Path.GetFileNameWithoutExtension(filePath), process);
+            if (process != null) _runningProcesses.Add(Path.GetFileNameWithoutExtension(filePath), process);
             Console.WriteLine($"Started {Path.GetFileName(filePath)}");
         }
         catch (Exception ex)
@@ -70,7 +63,7 @@ public class DriverManager
     
     public void StartDriverByName(string exeName)
     {
-        string exeFilePath = Path.Combine(_exeFolderPath, $"{exeName}.exe");
+        string exeFilePath = Path.Combine(exeFolderPath, $"{exeName}.exe");
         if (File.Exists(exeFilePath))
         {
             try
@@ -82,7 +75,7 @@ public class DriverManager
                     CreateNoWindow = true
                 };
                 var process = Process.Start(startInfo);
-                _runningProcesses.Add(exeName, process);
+                if (process != null) _runningProcesses.Add(exeName, process);
                 Console.WriteLine($"Started {exeName}.exe");
             }
             catch (Exception ex)

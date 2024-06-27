@@ -59,7 +59,8 @@ public partial class DeviceDetailsViewModel:ObservableObject
                    _devices.Add(device);
                 }
             }
-            
+
+            Device = _devices.FirstOrDefault(p => p.device_id == _device.device_id);
         });
     }
     
