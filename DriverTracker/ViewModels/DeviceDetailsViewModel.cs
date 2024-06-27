@@ -15,6 +15,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
     [ObservableProperty] private Driver _driver = new();
 
     [ObservableProperty] private ObservableCollection<Device> _devices = new();
+    [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
     private readonly AppBDContext _context = new ();
     
     [RelayCommand]
@@ -81,6 +82,28 @@ public partial class DeviceDetailsViewModel:ObservableObject
             //IsBusy = false;
             //BusyText = "Processing...";
         }
+    }
+    
+    public async Task LoadDriversAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            var drivers = await _context.GetAllAsync<Driver>();
+            if (drivers is not null && drivers.Any())
+            {
+                _drivers ??= new ObservableCollection<Driver>();
+                _drivers.Clear();
+                foreach (var driver in drivers)
+                {
+                    if (_drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
+                    {
+                        _drivers.Add(driver);
+                    }
+                }
+            }
+
+            Driver = _drivers.FirstOrDefault(p => p.driver_id == _driver.driver_id);
+        });
     }
 
     [RelayCommand]

@@ -19,5 +19,6 @@ public partial class DeviceDetailsPage : ContentPage
     protected override void OnAppearing()
     {
         _=_viewModel.LoadDevicesAsync();
+        _ = _viewModel.LoadDriversAsync();
     }
 }
