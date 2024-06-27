@@ -26,7 +26,6 @@ public partial class AddDeviceViewModel : ObservableObject
     private async Task AddDeviceAndDriver()
     {
         await LoadDevicesAsync();
-    
         
         if (_newDevice.IsDeviceNameNull())
         {
@@ -36,7 +35,7 @@ public partial class AddDeviceViewModel : ObservableObject
 
         if (!(Validator.IsDeviceFieldValid(_newDevice.device_name)))
         {
-            await Shell.Current.DisplayAlert("Validation Error", "Password or Login is too short.", "Ok");
+            await Shell.Current.DisplayAlert("Validation Error", "Device name is too short.", "Ok");
             return;
         }
         
@@ -69,8 +68,9 @@ public partial class AddDeviceViewModel : ObservableObject
                                                 && p.driver_port == _chosenDriver.driver_port) == null)
                {
                    await _context.AddItemAsync<Driver>(_chosenDriver);
-                   _newDevice.device_driver_id = _drivers.Count + 1;
                    _drivers.Add(_chosenDriver);
+                   _newDevice.device_driver_id = _drivers.Count;
+                  
                }
                else
                {
@@ -96,6 +96,7 @@ public partial class AddDeviceViewModel : ObservableObject
     {
         await ExecuteAsync(async () =>
         {
+            _driverNames.Clear();
             foreach (var driver in _drivers)
             {
                 if (_driverNames.FirstOrDefault(p=>p == driver.driver_name) == null)
@@ -114,6 +115,7 @@ public partial class AddDeviceViewModel : ObservableObject
             if (devices is not null && devices.Any())
             {
                 _devices ??= new ObservableCollection<Device>();
+                _devices.Clear();
                 foreach (var device in devices)
                 {
                     if (_devices.FirstOrDefault(p=> p.device_id == device.device_id) == null)
@@ -133,6 +135,7 @@ public partial class AddDeviceViewModel : ObservableObject
             if (drivers is not null && drivers.Any())
             {
                 _drivers ??= new ObservableCollection<Driver>();
+                _drivers.Clear();
                 foreach (var driver in drivers)
                 {
                     if (_drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)

@@ -7,17 +7,17 @@ using DriverTracker.ViewModels;
 
 namespace DriverTracker.Views;
 
-public partial class DeviceDetailsPage : ContentPage
+public partial class EditDevicePage : ContentPage
 {
-    private DeviceDetailsViewModel _viewModel = new();
-    public DeviceDetailsPage()
+    private EditDeviceViewModel _viewModel = new();
+    public EditDevicePage()
     {
         InitializeComponent();
         BindingContext = _viewModel;
     }
-
+    
     protected override void OnAppearing()
     {
-        _=_viewModel.LoadDevicesAsync();
+        _viewModel.LoadDriversAsync();
     }
 }

@@ -9,7 +9,7 @@ namespace DriverTracker.Views;
 
 public partial class MainPage : ContentPage
 {
-    private MainPageViewModel _viewModel = new();
+    public MainPageViewModel _viewModel = new();
     public MainPage()
     {
         InitializeComponent();

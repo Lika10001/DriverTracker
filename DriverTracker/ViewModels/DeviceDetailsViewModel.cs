@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DriverTracker.Views;
@@ -10,8 +11,11 @@ namespace DriverTracker.ViewModels;
 [QueryProperty(nameof(Models.Driver), "Driver")]
 public partial class DeviceDetailsViewModel:ObservableObject
 {
-    [ObservableProperty] private Device _device;
-    [ObservableProperty] private Driver _driver;
+    [ObservableProperty] private Device _device = new();
+    [ObservableProperty] private Driver _driver = new();
+
+    [ObservableProperty] private ObservableCollection<Device> _devices = new();
+    private readonly AppBDContext _context = new ();
     
     [RelayCommand]
     public async Task GoBackToMainPage()
@@ -19,5 +23,84 @@ public partial class DeviceDetailsViewModel:ObservableObject
         await Shell.Current.GoToAsync(nameof(MainPage), true);
     }
 
+    [RelayCommand]
+    public async Task DeleteDeviceAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            bool userChoice = await Shell.Current.DisplayAlert("Delete Device", "Do you really want to delete this device?", "Yes", "No");
+            if (_devices.Any() && userChoice)
+            {
+                foreach (var device in _devices)
+                {
+                    if (_device.device_id == device.device_id)
+                    {
+                        _devices.Remove(device);
+                        await _context.DeleteItemAsync(_device);
+                        await Shell.Current.GoToAsync(nameof(MainPage), true);
+                    }
+                }
+            }
+            
+        });
+    }
+    
+    public async Task LoadDevicesAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            var devices = await _context.GetAllAsync<Device>();
+            if (devices is not null && devices.Any())
+            {
+                _devices ??= new ObservableCollection<Device>();
+                _devices.Clear();
+                foreach (var device in devices)
+                {
+                   _devices.Add(device);
+                }
+            }
+            
+        });
+    }
+    
+    private async Task ExecuteAsync(Func<Task> operation, string? busyText = null)
+    {
+        // IsBusy = true;
+        //BusyText = busyText ?? "Processing...";
+        try
+        {
+            await operation?.Invoke();
+        }
+        catch(Exception ex)
+        {
+                
+        }
+        finally
+        {
+            //IsBusy = false;
+            //BusyText = "Processing...";
+        }
+    }
+
+    [RelayCommand]
+    public async Task EditDeviceAsync()
+    {
+        Driver currDeviceDriver = new Driver();
+        currDeviceDriver = _driver;
+        Device currDevice = new Device();
+        currDevice = _device;
+        if (currDevice == null || currDeviceDriver == null)
+        {
+            await Shell.Current.DisplayAlert("Details error", "No details found about this device", "Ok");
+        }
+        else
+        {
+            await Shell.Current.GoToAsync(nameof(EditDevicePage), true, new Dictionary<string, object>
+            {
+                { "Device", currDevice },
+                { "Driver", currDeviceDriver }
+            });
+        }
+    }
     
 }

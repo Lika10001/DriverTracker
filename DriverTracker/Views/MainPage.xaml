@@ -4,12 +4,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DriverTracker.ViewModels"
              xmlns:models="clr-namespace:DriverTracker.Models"
-             xmlns:compatibility="clr-namespace:Microsoft.Maui.Controls.Compatibility;assembly=Microsoft.Maui.Controls"
              xmlns:classes="clr-namespace:DriverTracker.Classes"
              x:Class="DriverTracker.Views.MainPage">
     <ContentPage.Resources>
         <ResourceDictionary>
-            <classes:IntToBooleanConverter x:Key="statusConverter" />
+            <classes:IntToBooleanConverter x:Key="StatusConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -23,52 +22,55 @@
                         <Image Source="main_devices.jpg" Aspect="AspectFill" Margin="0"/>
                     </Frame>
                 </StackLayout>
-                <StackLayout>
-                    <!-- SelectionChanged="productsCollection_SelectionChanged"-->
-                    <CollectionView x:Name="DevicesCollection"
-                                    ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=Devices}"
-                                    Margin="10"
-                                    SelectionMode="Single"
-                                  
-                    >
-                        <CollectionView.ItemsLayout>
-                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="20" />
-                        </CollectionView.ItemsLayout>
+                <ScrollView Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <StackLayout>
+                            <!-- SelectionChanged="productsCollection_SelectionChanged"-->
+                            <CollectionView x:Name="DevicesCollection"
+                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=Devices}"
+                                            Margin="10"
+                                            SelectionMode="Single"
+                                            HeightRequest="400"
+                                          
+                            >
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="20" />
+                                </CollectionView.ItemsLayout>
 
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Device">
-                                <VerticalStackLayout>
-                                    <HorizontalStackLayout>
-                                        <Frame BackgroundColor="White" HeightRequest="100" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="50">
-                                            <Frame.GestureRecognizers>
-                                                <TapGestureRecognizer 
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GoToDetailsPageCommand}"
-                                                    CommandParameter="{Binding .}"/>
-                                            </Frame.GestureRecognizers>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Device">
+                                        <VerticalStackLayout>
                                             <HorizontalStackLayout>
-                                                <StackLayout>
-                                                    <Image 
-                                                        Aspect="AspectFill"
-                                                        HeightRequest="100"
-                                                        Source="one_device.jpg"
-                                                        WidthRequest="100" />
-                                                    <StackLayout>
-                                                </StackLayout>
-                                                </StackLayout>
-                                                    <Label Text="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_name}" FontSize= "22" TextColor="CadetBlue" FontAttributes="Bold" Padding="35"/>
-                                                <StackLayout Padding="30">
-                                                    <!--Toggled="switcher_Toggled"-->
-                                                    <Switch x:Name="switcher" OnColor="Green" WidthRequest="100"
-                                                            HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource statusConverter}}"/>
-                                                </StackLayout>
-                                                </HorizontalStackLayout>
-                                        </Frame>
-                                    </HorizontalStackLayout>
-                                 </VerticalStackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </StackLayout>
+                                                <Frame BackgroundColor="White" HeightRequest="100" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="50">
+                                                    <Frame.GestureRecognizers>
+                                                        <TapGestureRecognizer 
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GoToDetailsPageCommand}"
+                                                            CommandParameter="{Binding .}"/>
+                                                    </Frame.GestureRecognizers>
+                                                    <HorizontalStackLayout>
+                                                        <StackLayout>
+                                                            <Image 
+                                                                Aspect="AspectFill"
+                                                                HeightRequest="100"
+                                                                Source="one_device.jpg"
+                                                                WidthRequest="100" />
+                                                            <StackLayout>
+                                                        </StackLayout>
+                                                        </StackLayout>
+                                                            <Label Text="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_name}" FontSize= "22" TextColor="CadetBlue" FontAttributes="Bold" Padding="35"/>
+                                                        <StackLayout Padding="30">
+                                                            <!--Toggled="switcher_Toggled"-->
+                                                            <Switch x:Name="switcher" OnColor="Green" WidthRequest="100"
+                                                                    HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource StatusConverter}}"/>
+                                                        </StackLayout>
+                                                        </HorizontalStackLayout>
+                                                </Frame>
+                                            </HorizontalStackLayout>
+                                         </VerticalStackLayout>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </StackLayout>
+                </ScrollView>    
           </Grid>
                 <HorizontalStackLayout>
                     <Button Text="Add New Device" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToAddDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />

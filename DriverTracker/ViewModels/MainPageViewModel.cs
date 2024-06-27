@@ -86,6 +86,7 @@ public partial class MainPageViewModel : ObservableObject
             if (drivers is not null && drivers.Any())
             {
                 _drivers ??= new ObservableCollection<Driver>();
+                _drivers.Clear();
                 foreach (var driver in drivers)
                 {
                     if (_drivers.FirstOrDefault(p=>p.driver_id == driver.driver_id) == null)
@@ -146,6 +147,7 @@ public partial class MainPageViewModel : ObservableObject
             if (devices is not null && devices.Any())
             {
                 _devices ??= new ObservableCollection<Device>();
+                _devices.Clear();
                 foreach (var device in devices)
                 {
                     if (_devices.FirstOrDefault(p=>p.device_id == device.device_id) == null)

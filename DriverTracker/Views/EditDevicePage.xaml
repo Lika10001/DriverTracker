@@ -3,27 +3,28 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DriverTracker.ViewModels"
-             x:Class="DriverTracker.Views.AddDevicePage">
+             x:Class="DriverTracker.Views.EditDevicePage">
     <ContentPage.Content>
          <StackLayout BackgroundColor="#e6e6e6">
              <Grid>
                  <Frame  BackgroundColor="White" HeightRequest="600" HasShadow="True" Padding="0" Margin="0">
                     <StackLayout>
                         <StackLayout Margin="10">
-                            <Label Text="Add Device" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
+                            <Label Text="Edit Device" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
                         </StackLayout>
                         <StackLayout Margin="10">
                             <Label Text="Device name" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                             <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
                                 <StackLayout>
-                                    <Entry Placeholder="Device name" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:AddDeviceViewModel}}, Path=NewDevice.device_name}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                    <Entry Placeholder="Device name" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:EditDeviceViewModel}}, Path=Device.device_name}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
                                 </StackLayout>
                             </Frame>
                         </StackLayout>
                        
                         <StackLayout Margin="10">
                             <Label Text="Chosen driver" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                            <Picker x:Name="DriverPicker" Title="{Binding Driver.driver_id}" ItemsSource="{Binding Path=DriverNames}" SelectedItem="{Binding   ChosenDriver.driver_name, Mode=TwoWay}"
+                            <Picker x:Name="DriverPicker" ItemsSource="{Binding Path=DriverNames}"
+                                    SelectedItem="{Binding   Driver.driver_name, Mode=TwoWay}"
                                     >
                             </Picker>
                         </StackLayout>
@@ -32,7 +33,7 @@
                             <Label Text="Driver's IP" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                             <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
                                 <StackLayout>
-                                    <Entry Placeholder="Driver's IP" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:AddDeviceViewModel}}, Path=ChosenDriver.driver_ip}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                    <Entry Placeholder="Driver's IP" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:EditDeviceViewModel}}, Path=Driver.driver_ip}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
                                 </StackLayout>
                             </Frame>
                         </StackLayout>
@@ -41,7 +42,7 @@
                             <Label Text="Driver's port" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                             <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
                                 <StackLayout>
-                                    <Entry Placeholder="Driver's port" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:AddDeviceViewModel}}, Path=ChosenDriver.driver_port}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                    <Entry Placeholder="Driver's port" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:EditDeviceViewModel}}, Path=Driver.driver_port}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
                                 </StackLayout>
                             </Frame>
                         </StackLayout>
@@ -51,7 +52,7 @@
                         </StackLayout>-->
                         
                         <StackLayout>
-                            <Button Text="Save" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AddDeviceViewModel}}, Path=AddDeviceAndDriverCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                            <Button Text="Save" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:EditDeviceViewModel}}, Path=EditDeviceAndDriverCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
                         </StackLayout>
                     </StackLayout>
                 </Frame>

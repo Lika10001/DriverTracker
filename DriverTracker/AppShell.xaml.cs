@@ -14,5 +14,6 @@ public partial class AppShell : Shell
         //Routing.RegisterRoute(nameof(SighInPage), typeof(SighInPage));
         Routing.RegisterRoute(nameof(DeviceDetailsPage), typeof(DeviceDetailsPage));
         Routing.RegisterRoute(nameof(AddDevicePage), typeof(AddDevicePage));
+        Routing.RegisterRoute(nameof(EditDevicePage), typeof(EditDevicePage));
     }
 }
