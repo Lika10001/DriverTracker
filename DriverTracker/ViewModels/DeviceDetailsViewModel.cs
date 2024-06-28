@@ -14,9 +14,9 @@ public partial class DeviceDetailsViewModel:ObservableObject
     [ObservableProperty] private Device _device = new();
     [ObservableProperty] private Driver _driver = new();
 
-    [ObservableProperty] private ObservableCollection<Device> _devices = new();
-    [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
-    private readonly AppBDContext _context = new ();
+    [ObservableProperty] private ObservableCollection<Device> _devices;
+    [ObservableProperty] private ObservableCollection<Driver> _drivers;
+    private readonly AppDbContext _context = new ();
     
     [RelayCommand]
     public async Task GoBackToMainPage()

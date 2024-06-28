@@ -1,8 +1,6 @@
-﻿using DriverTracker.Models;
+﻿namespace DriverTracker;
 
-namespace DriverTracker;
-
-public partial class App : Application
+public partial class App
 {
     public App()
     {

@@ -23,7 +23,7 @@
                        
                         <StackLayout Margin="10">
                             <Label Text="Chosen driver" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                            <Picker x:Name="DriverPicker" Title="{Binding Driver.driver_id}" ItemsSource="{Binding Path=DriverNames}" SelectedItem="{Binding   ChosenDriver.driver_name, Mode=TwoWay}"
+                            <Picker x:Name="DriverPicker"  ItemsSource="{Binding Path=DriverNames}" SelectedItem="{Binding   ChosenDriver.driver_name, Mode=TwoWay}"
                                     >
                             </Picker>
                         </StackLayout>

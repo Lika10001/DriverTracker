@@ -53,8 +53,8 @@
 
                                    <Button Text="SIGN UP" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=SaveUserCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
                                     <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="15">
-                                       <!--<Label Text="Already have an account ? " TextColor="DarkGray" FontSize="Small"/>-->
-                                       <!--<Button Text="Sign In" TextColor="CadetBlue"  BackgroundColor="White" FontAttributes="Bold" FontSize="Small" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NavigateToSighInCommand}" />-->
+                                       <Label Text="Already have an account ? " TextColor="DarkGray" FontSize="Small"/>
+                                       <Button Text="Sign In" TextColor="CadetBlue"  BackgroundColor="White" FontAttributes="Bold" FontSize="Small" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NavigateToSighInCommand}" />
                                     </StackLayout>
                                     
                                 </StackLayout>

@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DriverTracker.Classes;
@@ -13,8 +12,10 @@ public partial class MainPageViewModel : ObservableObject
 {
     [ObservableProperty] private ObservableCollection<Device> _devices = new();
     [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
+    
+    private DriverManager _driverManager = new(GetCorrectPath());
   
-    private readonly AppBDContext _context = new ();
+    private readonly AppDbContext _context = new ();
     
     private static string GetCorrectPath()
     {
@@ -33,16 +34,17 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     public async Task StopAllDrivers()
     {
-       
+        await ExecuteAsync(async () =>
+        {
             Device currDevice = new();
-            DriverManager driverManager = new(GetCorrectPath());
-            foreach (var device in _devices)
+            List<Device> devicesForUpdating = new List<Device>(_devices);
+            foreach (var device in devicesForUpdating)
             {
                 if (device.device_status == 1)
                 {
                     try
                     {
-                        driverManager.StopDriverByName(
+                        _driverManager.StopDriverByName(
                             (_drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id)).driver_name);
                         currDevice.device_id = device.device_id;
                         currDevice.device_name = device.device_name;
@@ -54,9 +56,10 @@ public partial class MainPageViewModel : ObservableObject
                     {
                         throw new Exception();
                     }
-                    
+
                 }
-            }    
+            }
+        });
     }
 
     [RelayCommand]
@@ -105,9 +108,8 @@ public partial class MainPageViewModel : ObservableObject
         await ExecuteAsync(async () =>
         {
             Device currDevice = new();
-            string PathToDrivers = GetCorrectPath();
-            DriverManager driverManager = new(PathToDrivers);
-            foreach (var device in _devices)
+            List<Device> devicesForUpdating = new List<Device>(_devices);
+            foreach (var device in devicesForUpdating)
             {
                 if (device.device_status == 0){
                     try
@@ -116,7 +118,7 @@ public partial class MainPageViewModel : ObservableObject
                             _drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
                         if (driver != null)
                         {
-                            driverManager.StartDriverByName(driver.driver_name);
+                            _driverManager.StartDriverByName(driver.driver_name);
                             currDevice.device_status = 1;
                         }
                         else
@@ -167,10 +169,9 @@ public partial class MainPageViewModel : ObservableObject
                 if(await _context.UpdateItemAsync<Device>(device))
                 {
                     var deviceCopy = device.Clone();
-
-                    var index = Devices.IndexOf(device);
+                    var oldDevice = _devices.FirstOrDefault(p=>p.device_id == device.device_id);
+                    var index = _devices.IndexOf(oldDevice);
                     _devices.RemoveAt(index);
-
                     _devices.Insert(index, deviceCopy);
                 }
                 else
@@ -178,7 +179,7 @@ public partial class MainPageViewModel : ObservableObject
                     await Shell.Current.DisplayAlert("Error", "Device status update error", "Ok");
                     return;
                 }
-       });
+        });
     }
     
     private async Task ExecuteAsync(Func<Task> operation, string? busyText = null)
@@ -202,9 +203,16 @@ public partial class MainPageViewModel : ObservableObject
 
     
     [RelayCommand]
-    public async Task NavigateToAddDeviceAsync()
+    private async Task NavigateToAddDeviceAsync()
     {
         await Shell.Current.GoToAsync(nameof(AddDevicePage), true);
     }
+    
+    [RelayCommand]
+    private async Task NavigateToSighInPageAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(SighInPage), true);
+    }
+
     
 }

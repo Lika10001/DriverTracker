@@ -9,13 +9,13 @@ namespace DriverTracker.ViewModels;
 
 public partial class SighUpPageViewModel:ObservableObject
 {
-    [ObservableProperty] private string _userConfirmedPassword;
+    [ObservableProperty] private string? _userConfirmedPassword;
 
     [ObservableProperty] private User _newUser = new();
     
     private ObservableCollection<User> _users= new(); 
     
-    private readonly AppBDContext _context = new ();
+    private readonly AppDbContext _context = new ();
     
     
     [RelayCommand]
@@ -83,6 +83,7 @@ public partial class SighUpPageViewModel:ObservableObject
             if (users is not null && users.Any())
             {
                 _users ??= new ObservableCollection<User>();
+                _users.Clear();
                 foreach (var user in users)
                 {
                     _users.Add(user);

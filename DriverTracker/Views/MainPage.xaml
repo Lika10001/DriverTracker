@@ -13,9 +13,10 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout>
+            <HorizontalStackLayout>
                 <Label Text="Devices" FontSize= "26" TextColor="CadetBlue" FontAttributes="Bold" Margin="20"/>
-            </StackLayout>
+                <Button Text="Sigh out" BackgroundColor="IndianRed" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path= NavigateToSighInPageCommand}" />
+            </HorizontalStackLayout>
             <Grid>
                 <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
                     <Frame HeightRequest="500" BackgroundColor="CadetBlue" Padding="0" Margin="0">
@@ -59,8 +60,9 @@
                                                             <Label Text="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_name}" FontSize= "22" TextColor="CadetBlue" FontAttributes="Bold" Padding="35"/>
                                                         <StackLayout Padding="30">
                                                             <!--Toggled="switcher_Toggled"-->
-                                                            <Switch x:Name="switcher" OnColor="Green" WidthRequest="100"
-                                                                    HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource StatusConverter}}"/>
+                                                            <Switch x:Name="Switcher" WidthRequest="100"
+                                                                HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource StatusConverter}}"
+                                                                />
                                                         </StackLayout>
                                                         </HorizontalStackLayout>
                                                 </Frame>

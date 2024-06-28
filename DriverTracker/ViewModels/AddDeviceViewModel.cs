@@ -19,7 +19,7 @@ public partial class AddDeviceViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<string> _driverNames = new();
     
     [ObservableProperty] private ObservableCollection<Device> _devices; 
-    private readonly AppBDContext _context = new ();
+    private readonly AppDbContext _context = new ();
 
     
     [RelayCommand]

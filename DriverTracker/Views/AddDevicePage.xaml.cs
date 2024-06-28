@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DriverTracker.ViewModels;
 
 namespace DriverTracker.Views;
 
-public partial class AddDevicePage : ContentPage
+public partial class AddDevicePage
 {
     private AddDeviceViewModel _viewModel = new();
     public AddDevicePage()
@@ -18,6 +13,8 @@ public partial class AddDevicePage : ContentPage
 
     protected override void OnAppearing()
     {
-        _viewModel.LoadDriversAsync();
+        _ = _viewModel.LoadDriversAsync();
+        _viewModel.NewDevice = new();
+        _viewModel.ChosenDriver = new();
     }
 }

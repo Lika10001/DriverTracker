@@ -22,7 +22,7 @@ public static class MauiProgramExtensions
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-        builder.Services.AddSingleton<AppBDContext>();
+        builder.Services.AddSingleton<AppDbContext>();
         builder.Services.AddSingleton<SighInPage>();
         builder.Services.AddSingleton<SighUpPage>();
         builder.Services.AddSingleton<MainPage>();

@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DriverTracker.ViewModels;
 
 namespace DriverTracker.Views;
 
-public partial class SighInPage : ContentPage
+public partial class SighInPage
 {
-    private readonly SighInViewModel _viewModel;
+    private SighInViewModel _viewModel = new();
     
     public SighInPage (SighInViewModel viewModel)
     {
@@ -18,9 +13,11 @@ public partial class SighInPage : ContentPage
         _viewModel = viewModel;
     }
     
-    protected async override void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadUsersAsync();
+        _ = _viewModel.LoadUsersAsync();
+        _viewModel.UserName = "";
+        _viewModel.UserPassword = "";
     }
 }

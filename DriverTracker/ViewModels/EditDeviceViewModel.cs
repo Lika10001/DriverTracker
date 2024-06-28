@@ -19,7 +19,7 @@ public partial class EditDeviceViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Driver> _drivers;
     [ObservableProperty] private int _driverIndexForPicker = 0;
 
-    private AppBDContext _context = new();
+    private AppDbContext _context = new();
     
      public async Task GetDriverNamesFromCollection()
     {

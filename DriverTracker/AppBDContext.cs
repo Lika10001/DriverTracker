@@ -1,19 +1,17 @@
 using System.Linq.Expressions;
-using System.Reflection;
-using DriverTracker.Models;
 using SQLite;
 
 namespace DriverTracker;
 
-public class AppBDContext : IAsyncDisposable
+public class AppDbContext : IAsyncDisposable
 {
     private const String DatabaseFileName = "DriverTrackerDB.db";
     
-    static string projectDirectory = "C:\\Users\\User\\RiderProjects";
+    static readonly string ProjectDirectory = "C:\\Users\\User\\RiderProjects";
     
-    private static string DbPath => Path.Combine(projectDirectory, "DriverTracker", "DriverTracker", "Resources", "Database", DatabaseFileName);
+    private static string DbPath => Path.Combine(ProjectDirectory, "DriverTracker", "DriverTracker", "Resources", "Database", DatabaseFileName);
  
-    private SQLiteAsyncConnection _connection;
+    private SQLiteAsyncConnection? _connection;
     private SQLiteAsyncConnection Database =>
         (_connection = new SQLiteAsyncConnection(DbPath));
      private async Task CreateTableIfNotExists<TTable>() where TTable : class, new()
@@ -77,5 +75,5 @@ public class AppBDContext : IAsyncDisposable
             return await Database.DeleteAsync<TTable>(primaryKey) > 0;
         }
         
-        public async ValueTask DisposeAsync() => await _connection?.CloseAsync();
+        public async ValueTask DisposeAsync() => await _connection?.CloseAsync()!;
 }

@@ -10,19 +10,14 @@ namespace DriverTracker.ViewModels;
 public partial class SighInViewModel: ObservableObject
 {
     [ObservableProperty]
-    private string _userName;
+    private string? _userName;
 
     [ObservableProperty] 
-    private string _userPassword;
+    private string? _userPassword;
     
-    private readonly AppBDContext _context;
+    private readonly AppDbContext _context = new();
     
     private ObservableCollection<User> _users= new(); 
-    
-    public SighInViewModel(AppBDContext context)
-    {
-        _context = context;
-    }
     
     public async Task LoadUsersAsync()
     {

@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using System.Data.SqlTypes;
 using System.Runtime.CompilerServices;
 
 namespace DriverTracker.triggers;

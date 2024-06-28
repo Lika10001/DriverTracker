@@ -1,20 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DriverTracker.ViewModels;
 
 namespace DriverTracker.Views;
 
-public partial class SighUpPage : ContentPage
+public partial class SighUpPage
 {
-    private SighUpPageViewModel _viewModel;
+    private SighUpPageViewModel? _viewModel = new();
     public SighUpPage()
     {
         InitializeComponent();
-        BindingContext = new SighUpPageViewModel();
+        BindingContext = _viewModel;
        //BindingContext = viewModel;
         //_viewModel = viewModel;
+    }
+
+    protected override void OnAppearing()
+    {
+        _ = _viewModel.LoadUsersAsync();
+        _viewModel.NewUser = new();
     }
 }

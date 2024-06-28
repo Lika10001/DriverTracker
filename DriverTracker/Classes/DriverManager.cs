@@ -1,5 +1,4 @@
 using System.Diagnostics;
-
 namespace DriverTracker.Classes;
 
 public class DriverManager(string exeFolderPath)
@@ -66,21 +65,28 @@ public class DriverManager(string exeFolderPath)
         string exeFilePath = Path.Combine(exeFolderPath, $"{exeName}.exe");
         if (File.Exists(exeFilePath))
         {
-            try
+            if (!IsDriverRunning(exeName))
             {
-                var startInfo = new ProcessStartInfo
+                try
                 {
-                    FileName = exeFilePath,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                var process = Process.Start(startInfo);
-                if (process != null) _runningProcesses.Add(exeName, process);
-                Console.WriteLine($"Started {exeName}.exe");
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = exeFilePath,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    var process = Process.Start(startInfo);
+                    if (process != null) _runningProcesses.Add(exeName, process);
+                    Console.WriteLine($"Started {exeName}.exe");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error starting {exeName}.exe: {ex.Message}");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error starting {exeName}.exe: {ex.Message}");
+                Console.WriteLine($"{exeName}.exe is already running.");
             }
         }
         else
