@@ -16,7 +16,6 @@
             </StackLayout>
             <StackLayout Padding="0" Margin="10,100,10,0" HorizontalOptions="FillAndExpand">
                 <Frame  BackgroundColor="White" HeightRequest="300" HasShadow="True" Padding="0" Margin="0">
-
                     <StackLayout>
                         <StackLayout Margin="10">
                             <Label Text="SIGN IN" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
@@ -62,7 +61,6 @@
                             
                         </StackLayout>
                     </StackLayout>
-
                 </Frame>
             </StackLayout>
         </Grid>

@@ -15,41 +15,42 @@ public partial class EditDeviceViewModel : ObservableObject
     [ObservableProperty] private Device _device = new();
     [ObservableProperty] private Driver _driver = new();
     [ObservableProperty] private ObservableCollection<string> _driverNames = new();
-    [ObservableProperty] private ObservableCollection<Device> _devices;
-    [ObservableProperty] private ObservableCollection<Driver> _drivers;
-    [ObservableProperty] private int _driverIndexForPicker = 0;
+    [ObservableProperty] private ObservableCollection<Device> _devices = new();
+    [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
+    [ObservableProperty] private int _driverIndexForPicker;
 
-    private AppDbContext _context = new();
+    private readonly AppDbContext _context = new();
     
-     public async Task GetDriverNamesFromCollection()
+     private async Task GetDriverNamesFromCollection()
     {
-        await ExecuteAsync(async () =>
+        await ExecuteAsync(() =>
         {
-            _driverNames.Clear();
-            foreach (var driver in _drivers)
+            DriverNames.Clear();
+            foreach (var driver in Drivers)
             {
-                if (_driverNames.FirstOrDefault(p=>p == driver.driver_name) == null)
+                if (DriverNames.FirstOrDefault(p=>p == driver.driver_name) == null)
                 {
-                    _driverNames.Add(driver.driver_name);
+                    DriverNames.Add(driver.driver_name);
                 }
             }
+            return Task.CompletedTask;
         });
     }
     
-    public async Task LoadDevicesAsync()
+    private async Task LoadDevicesAsync()
     {
         await ExecuteAsync(async () =>
         {
             var devices = await _context.GetAllAsync<Device>();
-            if (devices is not null && devices.Any())
+            var enumerable = devices as Device[] ?? devices.ToArray();
+            if (enumerable.Any())
             {
-                _devices ??= new ObservableCollection<Device>();
-                _devices.Clear();
-                foreach (var device in devices)
+                Devices.Clear();
+                foreach (var device in enumerable)
                 {
-                    if (_devices.FirstOrDefault(p=> p.device_id == device.device_id) == null)
+                    if (Devices.FirstOrDefault(p=> p.device_id == device.device_id) == null)
                     {
-                        _devices.Add(device);
+                        Devices.Add(device);
                     }
                 }
             }
@@ -61,21 +62,21 @@ public partial class EditDeviceViewModel : ObservableObject
         await ExecuteAsync(async () =>
         {
             var drivers = await _context.GetAllAsync<Driver>();
-            if (drivers is not null && drivers.Any())
+            var enumerable = drivers as Driver[] ?? drivers.ToArray();
+            if (enumerable.Any())
             {
-                _drivers ??= new ObservableCollection<Driver>();
-                _drivers.Clear();
-                foreach (var driver in drivers)
+                Drivers.Clear();
+                foreach (var driver in enumerable)
                 {
-                    if (_drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
+                    if (Drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
                     {
-                        _drivers.Add(driver);
+                        Drivers.Add(driver);
                     }
                 }
             }
 
-            var currDriver = _drivers.FirstOrDefault(p => p.driver_id == _driver.driver_id);
-            _driverIndexForPicker = _drivers.IndexOf(currDriver);
+            var currDriver = Drivers.FirstOrDefault(p => p.driver_id == Driver.driver_id);
+            DriverIndexForPicker = Drivers.IndexOf(currDriver);
             await GetDriverNamesFromCollection();
         });
     }
@@ -86,11 +87,11 @@ public partial class EditDeviceViewModel : ObservableObject
         //BusyText = busyText ?? "Processing...";
         try
         {
-            await operation?.Invoke();
+            await operation.Invoke();
         }
-        catch(Exception ex)
+        catch(Exception)
         {
-                
+            throw new Exception();
         }
         finally
         {
@@ -103,25 +104,25 @@ public partial class EditDeviceViewModel : ObservableObject
     private async Task EditDeviceAndDriverAsync()
     {
         await LoadDevicesAsync();
-         if (_device.IsDeviceNameNull())
+         if (Device.IsDeviceNameNull())
         {
             await Shell.Current.DisplayAlert("Validation Error", "One of the fields is empty.", "Ok");
             return;
         }
 
-        if (!(Validator.IsDeviceFieldValid(_device.device_name)))
+        if (!(Validator.IsDeviceFieldValid(Device.device_name)))
         {
             await Shell.Current.DisplayAlert("Validation Error", "Device name is too short.", "Ok");
             return;
         }
         
-        if (_driver.driver_name == null)
+        if (Driver.driver_name == "")
         {
             await Shell.Current.DisplayAlert("Validation Error", "Driver name is empty.", "Ok");
             return;
         }
         
-        if (!(Validator.IsIPValid(_driver.driver_ip) && Validator.IsPortValid(_driver.driver_port.ToString())))
+        if (!(Validator.IsIPValid(Driver.driver_ip) && Validator.IsPortValid(Driver.driver_port.ToString())))
         {
             await Shell.Current.DisplayAlert("Validation Error", "Driver ip or port is incorrect.", "Ok");
             return;
@@ -131,31 +132,30 @@ public partial class EditDeviceViewModel : ObservableObject
         {
             try
             {
-               // сначала нужно проверить драйвер, новый это или существующий
-               if (_drivers.FirstOrDefault(p => p.driver_name == _driver.driver_name
-                                                &&  p.driver_ip == _driver.driver_ip
-                                                && p.driver_port == _driver.driver_port) == null)
+               if (Drivers.FirstOrDefault(p => p.driver_name == Driver.driver_name
+                                                &&  p.driver_ip == Driver.driver_ip
+                                                && p.driver_port == Driver.driver_port) == null)
                {
-                   await _context.AddItemAsync<Driver>(_driver);
-                   _drivers.Add(_driver);
-                   _device.device_driver_id = _drivers.Count;
+                   await _context.AddItemAsync(Driver);
+                   Drivers.Add(Driver);
+                   Device.device_driver_id = Drivers.Count;
                   
                }
                else
                {
-                   var existDriver= _drivers.FirstOrDefault(p => p.driver_name == _driver.driver_name
-                                                                && p.driver_ip == _driver.driver_ip
-                                                                && p.driver_port == _driver.driver_port);
-                   _device.device_driver_id = existDriver.driver_id;
+                   var existDriver= Drivers.FirstOrDefault(p => p.driver_name == Driver.driver_name
+                                                                && p.driver_ip == Driver.driver_ip
+                                                                && p.driver_port == Driver.driver_port);
+                   Device.device_driver_id = existDriver.driver_id;
                }
-               await _context.UpdateItemAsync<Device>(_device);
-               var oldDevice = _devices.FirstOrDefault(p=>p.device_id == _device.device_id);
-               var index = _devices.IndexOf(oldDevice);
-               _devices.RemoveAt(index);
-               _devices.Insert(index, _device.Clone());
+               await _context.UpdateItemAsync(Device);
+               var oldDevice = Devices.FirstOrDefault(p=>p.device_id == Device.device_id);
+               var index = Devices.IndexOf(oldDevice);
+               Devices.RemoveAt(index);
+               Devices.Insert(index, Device.Clone());
 
-               var currDevice = _device;
-               var currDriver = _driver;
+               var currDevice = Device;
+               var currDriver = Driver;
                 await Shell.Current.GoToAsync(nameof(DeviceDetailsPage), true, new Dictionary<string, object>()
                 {
                     {"Device", currDevice},

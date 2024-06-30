@@ -6,11 +6,10 @@ public partial class SighInPage
 {
     private SighInViewModel _viewModel = new();
     
-    public SighInPage (SighInViewModel viewModel)
+    public SighInPage ()
     {
         InitializeComponent();
-        BindingContext =  viewModel;
-        _viewModel = viewModel;
+        BindingContext =  _viewModel;
     }
     
     protected override void OnAppearing()

@@ -1,13 +1,14 @@
 using System.Diagnostics;
 namespace DriverTracker.Classes;
 
-public class DriverManager(string exeFolderPath)
+public class DriverManager()
 {
     private readonly Dictionary<string, Process> _runningProcesses = new();
+    private readonly string _driversPath = GetCorrectPath();
 
     public void StartAllDrivers()
     {
-        var files = Directory.GetFiles(exeFolderPath, "*.exe");
+        var files = Directory.GetFiles(_driversPath, "*.exe");
         Parallel.ForEach(files, StartDriver);
     }
 
@@ -62,7 +63,7 @@ public class DriverManager(string exeFolderPath)
     
     public void StartDriverByName(string exeName)
     {
-        string exeFilePath = Path.Combine(exeFolderPath, $"{exeName}.exe");
+        string exeFilePath = Path.Combine(_driversPath, $"{exeName}.exe");
         if (File.Exists(exeFilePath))
         {
             if (!IsDriverRunning(exeName))
@@ -117,5 +118,19 @@ public class DriverManager(string exeFolderPath)
         {
             Console.WriteLine($"{exeName}.exe is not running.");
         }
+    }
+    
+    private static string GetCorrectPath()
+    {
+        var location = AppDomain.CurrentDomain.BaseDirectory;
+        int indexOfEndingWord = location.LastIndexOf("DriverTracker");
+        string substringToEndingWord = "";
+        if (indexOfEndingWord != -1)
+        {
+            int lengthOfEndingWord = "DriverTracker".Length;
+            substringToEndingWord = location.Substring(0, indexOfEndingWord + lengthOfEndingWord);
+        }
+
+        return Path.Combine(substringToEndingWord, @"Resources\Drivers");
     }
 }

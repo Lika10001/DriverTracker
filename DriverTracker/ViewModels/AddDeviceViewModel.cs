@@ -14,11 +14,11 @@ public partial class AddDeviceViewModel : ObservableObject
     [ObservableProperty] private Device _newDevice= new ();
     [ObservableProperty] private Driver _chosenDriver = new();
     
-    [ObservableProperty] private ObservableCollection<Driver> _drivers;
-    [ObservableProperty] private string _selectedDriverNameFromPicker;
+    [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
+    [ObservableProperty] private string _selectedDriverNameFromPicker = "";
     [ObservableProperty] private ObservableCollection<string> _driverNames = new();
     
-    [ObservableProperty] private ObservableCollection<Device> _devices; 
+    [ObservableProperty] private ObservableCollection<Device> _devices = new(); 
     private readonly AppDbContext _context = new ();
 
     
@@ -27,31 +27,31 @@ public partial class AddDeviceViewModel : ObservableObject
     {
         await LoadDevicesAsync();
         
-        if (_newDevice.IsDeviceNameNull())
+        if (NewDevice.IsDeviceNameNull())
         {
             await Shell.Current.DisplayAlert("Validation Error", "One of the fields is empty.", "Ok");
             return;
         }
 
-        if (!(Validator.IsDeviceFieldValid(_newDevice.device_name)))
+        if (!(Validator.IsDeviceFieldValid(NewDevice.device_name)))
         {
             await Shell.Current.DisplayAlert("Validation Error", "Device name is too short.", "Ok");
             return;
         }
         
-        if (_chosenDriver.driver_name == null)
+        if (ChosenDriver.driver_name == "")
         {
             await Shell.Current.DisplayAlert("Validation Error", "Driver name is empty.", "Ok");
             return;
         }
         
-        if (!(Validator.IsIPValid(_chosenDriver.driver_ip) && Validator.IsPortValid(_chosenDriver.driver_port.ToString())))
+        if (!(Validator.IsIPValid(ChosenDriver.driver_ip) && Validator.IsPortValid(ChosenDriver.driver_port.ToString())))
         {
             await Shell.Current.DisplayAlert("Validation Error", "Driver ip or port is incorrect.", "Ok");
             return;
         }
 
-        if (_devices.Any(p => p.device_name == _newDevice.device_name))
+        if (Devices.Any(p => p.device_name == NewDevice.device_name))
         {
             await Shell.Current.DisplayAlert("Validation Error", "This device already exists. Choose another name.",
                 "Ok");
@@ -63,24 +63,24 @@ public partial class AddDeviceViewModel : ObservableObject
             try
             {
                // _chosenDriver.driver_name = _selectedDriverNameFromPicker;
-               if (_drivers.FirstOrDefault(p => p.driver_name == _chosenDriver.driver_name
-                                                &&  p.driver_ip == _chosenDriver.driver_ip
-                                                && p.driver_port == _chosenDriver.driver_port) == null)
+               if (Drivers.FirstOrDefault(p => p.driver_name == ChosenDriver.driver_name
+                                                &&  p.driver_ip == ChosenDriver.driver_ip
+                                                && p.driver_port == ChosenDriver.driver_port) == null)
                {
-                   await _context.AddItemAsync<Driver>(_chosenDriver);
-                   _drivers.Add(_chosenDriver);
-                   _newDevice.device_driver_id = _drivers.Count;
+                   await _context.AddItemAsync<Driver>(ChosenDriver);
+                   Drivers.Add(ChosenDriver);
+                   NewDevice.device_driver_id = Drivers.Count;
                   
                }
                else
                {
-                   var existDriver= _drivers.FirstOrDefault(p => p.driver_name == _chosenDriver.driver_name
-                                                                && p.driver_ip == _chosenDriver.driver_ip
-                                                                && p.driver_port == _chosenDriver.driver_port);
-                   _newDevice.device_driver_id = existDriver.driver_id;
+                   var existDriver= Drivers.FirstOrDefault(p => p.driver_name == ChosenDriver.driver_name
+                                                                && p.driver_ip == ChosenDriver.driver_ip
+                                                                && p.driver_port == ChosenDriver.driver_port);
+                   NewDevice.device_driver_id = existDriver.driver_id;
                }
-               await _context.AddItemAsync<Device>(_newDevice);
-                _devices.Add(_newDevice);
+               await _context.AddItemAsync<Device>(NewDevice);
+                Devices.Add(NewDevice);
                 await Shell.Current.GoToAsync(nameof(MainPage), true);
                 await Shell.Current.DisplayAlert("Success", "Your device has been successfully created.",
                     "Ok");
@@ -92,18 +92,19 @@ public partial class AddDeviceViewModel : ObservableObject
         });
     }
 
-    public async Task GetDriverNamesFromCollection()
+    private async Task GetDriverNamesFromCollection()
     {
-        await ExecuteAsync(async () =>
+        await ExecuteAsync( () =>
         {
-            _driverNames.Clear();
-            foreach (var driver in _drivers)
+            DriverNames.Clear();
+            foreach (var driver in Drivers)
             {
-                if (_driverNames.FirstOrDefault(p=>p == driver.driver_name) == null)
+                if (DriverNames.FirstOrDefault(p => p == driver.driver_name) == null)
                 {
-                    _driverNames.Add(driver.driver_name);
+                    DriverNames.Add(driver.driver_name);
                 }
             }
+            return Task.CompletedTask;
         });
     }
     
@@ -114,13 +115,13 @@ public partial class AddDeviceViewModel : ObservableObject
             var devices = await _context.GetAllAsync<Device>();
             if (devices is not null && devices.Any())
             {
-                _devices ??= new ObservableCollection<Device>();
-                _devices.Clear();
+                Devices ??= new ObservableCollection<Device>();
+                Devices.Clear();
                 foreach (var device in devices)
                 {
-                    if (_devices.FirstOrDefault(p=> p.device_id == device.device_id) == null)
+                    if (Devices.FirstOrDefault(p=> p.device_id == device.device_id) == null)
                     {
-                        _devices.Add(device);
+                        Devices.Add(device);
                     }
                 }
             }
@@ -134,13 +135,13 @@ public partial class AddDeviceViewModel : ObservableObject
             var drivers = await _context.GetAllAsync<Driver>();
             if (drivers is not null && drivers.Any())
             {
-                _drivers ??= new ObservableCollection<Driver>();
-                _drivers.Clear();
+                Drivers ??= new ObservableCollection<Driver>();
+                Drivers.Clear();
                 foreach (var driver in drivers)
                 {
-                    if (_drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
+                    if (Drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
                     {
-                        _drivers.Add(driver);
+                        Drivers.Add(driver);
                     }
                 }
             }
@@ -158,7 +159,7 @@ public partial class AddDeviceViewModel : ObservableObject
         }
         catch(Exception ex)
         {
-                
+            throw new Exception();
         }
         finally
         {

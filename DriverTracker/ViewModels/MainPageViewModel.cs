@@ -13,23 +13,9 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Device> _devices = new();
     [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
     
-    private DriverManager _driverManager = new(GetCorrectPath());
+    private DriverManager _driverManager = new();
   
     private readonly AppDbContext _context = new ();
-    
-    private static string GetCorrectPath()
-    {
-        var location = AppDomain.CurrentDomain.BaseDirectory;
-        int indexOfEndingWord = location.LastIndexOf("DriverTracker");
-        string substringToEndingWord = "";
-        if (indexOfEndingWord != -1)
-        {
-            int lengthOfEndingWord = "DriverTracker".Length;
-            substringToEndingWord = location.Substring(0, indexOfEndingWord + lengthOfEndingWord);
-        }
-
-        return Path.Combine(substringToEndingWord, @"Resources\Drivers");
-    }
 
     [RelayCommand]
     public async Task StopAllDrivers()
@@ -98,10 +84,9 @@ public partial class MainPageViewModel : ObservableObject
                     }
                 }
             }
-            await RunDriversForDevices();
         });
-        
     }
+    
     [RelayCommand]
     public async Task RunDriversForDevices()
     {

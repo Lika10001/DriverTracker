@@ -13,13 +13,32 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <HorizontalStackLayout>
-                <Label Text="Devices" FontSize= "26" TextColor="CadetBlue" FontAttributes="Bold" Margin="20"/>
-                <Button Text="Sigh out" BackgroundColor="IndianRed" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path= NavigateToSighInPageCommand}" />
+            <HorizontalStackLayout HorizontalOptions="FillAndExpand">
+                <Frame BackgroundColor="White" HorizontalOptions="FillAndExpand" HeightRequest="70" HasShadow="True" Padding="30, 0, 40, 0">
+                    <HorizontalStackLayout>
+                        <Label Text="Devices" FontSize= "26" TextColor="CadetBlue" FontAttributes="Bold" Margin="15, 10, 40, 10"/>
+                        <Button Text="Add New Device" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToAddDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" HorizontalOptions="FillAndExpand" CornerRadius="30" Padding="20, 0, 20, 0" Margin="10, 10, 0, 10" />
+                        <!-- <Button Text="Add New Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />-->
+                        <Button Text="Run All Devices"   Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=RunDriversForDevicesCommand}" BackgroundColor="CadetBlue" TextColor="White" HorizontalOptions="FillAndExpand" CornerRadius="30" Padding="20, 0, 20, 0" Margin="10, 10, 0, 10" />
+                        <Button Text="Stop All Devices" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=StopAllDriversCommand}" BackgroundColor="CadetBlue" TextColor="White" HorizontalOptions="FillAndExpand" CornerRadius="30" Padding="20, 0, 20, 0" Margin="10, 10, 0, 10" />
+                        <Frame BackgroundColor="IndianRed" BorderColor="IndianRed" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="25" Margin="20, 10, 0, 10">
+                            <Grid>
+                                <StackLayout Orientation="Horizontal" Margin="0">
+                                    <Button Text="Sigh out" BackgroundColor="IndianRed" CornerRadius="25"  Margin="0" Padding="60, 0, 20, 0" Command="{Binding  Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToSighInPageCommand}" TextColor="White" FontAttributes="None" HorizontalOptions="FillAndExpand" />
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Margin="0">
+                                    <Frame BackgroundColor="IndianRed" HeightRequest="47" WidthRequest="47" CornerRadius="25" Padding="0" Margin="0">
+                                        <Image Source="avatar.png" Aspect="AspectFill" Margin="0"/>
+                                    </Frame>
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </HorizontalStackLayout>
+                </Frame>
             </HorizontalStackLayout>
             <Grid>
                 <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
-                    <Frame HeightRequest="500" BackgroundColor="CadetBlue" Padding="0" Margin="0">
+                    <Frame HeightRequest="600" BackgroundColor="CadetBlue" Padding="0" Margin="0">
                         <Image Source="main_devices.jpg" Aspect="AspectFill" Margin="0"/>
                     </Frame>
                 </StackLayout>
@@ -30,7 +49,7 @@
                                             ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=Devices}"
                                             Margin="10"
                                             SelectionMode="Single"
-                                            HeightRequest="400"
+                                            HeightRequest="550"
                                           
                             >
                                 <CollectionView.ItemsLayout>
@@ -40,7 +59,7 @@
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate x:DataType="models:Device">
                                         <VerticalStackLayout>
-                                            <HorizontalStackLayout>
+                                            <HorizontalStackLayout Margin="20, 0, 0, 0">
                                                 <Frame BackgroundColor="White" HeightRequest="100" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="50">
                                                     <Frame.GestureRecognizers>
                                                         <TapGestureRecognizer 
@@ -72,14 +91,8 @@
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </StackLayout>
-                </ScrollView>    
+                </ScrollView>  
           </Grid>
-                <HorizontalStackLayout>
-                    <Button Text="Add New Device" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToAddDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                    <!-- <Button Text="Add New Driver" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />-->
-                    <Button Text="Run All Devices"   Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=RunDriversForDevicesCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                    <Button Text="Stop All Devices" Command = "{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=StopAllDriversCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                </HorizontalStackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

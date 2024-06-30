@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DriverTracker.Classes;
 using DriverTracker.Views;
 using DriverTracker.Models;
 using Device = DriverTracker.Models.Device;
@@ -14,30 +15,31 @@ public partial class DeviceDetailsViewModel:ObservableObject
     [ObservableProperty] private Device _device = new();
     [ObservableProperty] private Driver _driver = new();
 
-    [ObservableProperty] private ObservableCollection<Device> _devices;
-    [ObservableProperty] private ObservableCollection<Driver> _drivers;
+    [ObservableProperty] private ObservableCollection<Device> _devices = new();
+    [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
+    private readonly DriverManager _driverManager = new();
     private readonly AppDbContext _context = new ();
     
     [RelayCommand]
-    public async Task GoBackToMainPage()
+    private async Task GoBackToMainPage()
     {
         await Shell.Current.GoToAsync(nameof(MainPage), true);
     }
 
     [RelayCommand]
-    public async Task DeleteDeviceAsync()
+    private async Task DeleteDeviceAsync()
     {
         await ExecuteAsync(async () =>
         {
             bool userChoice = await Shell.Current.DisplayAlert("Delete Device", "Do you really want to delete this device?", "Yes", "No");
-            if (_devices.Any() && userChoice)
+            if (Devices.Any() && userChoice)
             {
-                foreach (var device in _devices)
+                foreach (var device in Devices)
                 {
-                    if (_device.device_id == device.device_id)
+                    if (Device.device_id == device.device_id)
                     {
-                        _devices.Remove(device);
-                        await _context.DeleteItemAsync(_device);
+                        Devices.Remove(device);
+                        await _context.DeleteItemAsync(Device);
                         await Shell.Current.GoToAsync(nameof(MainPage), true);
                     }
                 }
@@ -51,17 +53,23 @@ public partial class DeviceDetailsViewModel:ObservableObject
         await ExecuteAsync(async () =>
         {
             var devices = await _context.GetAllAsync<Device>();
-            if (devices is not null && devices.Any())
+            var enumerable = devices as Device[] ?? devices.ToArray();
+            if (enumerable.Any())
             {
-                _devices ??= new ObservableCollection<Device>();
-                _devices.Clear();
-                foreach (var device in devices)
+                Devices.Clear();
+                foreach (var device in enumerable)
                 {
-                   _devices.Add(device);
+                   Devices.Add(device);
                 }
             }
 
-            Device = _devices.FirstOrDefault(p => p.device_id == _device.device_id);
+            var currDevice = Devices.FirstOrDefault(p => p.device_id == Device.device_id);
+            if (currDevice != null)
+            {
+                Device.device_status = currDevice.device_status;
+                Device.device_driver_id = currDevice.device_driver_id;
+                Device.device_name = currDevice.device_name;
+            }
         });
     }
     
@@ -71,11 +79,11 @@ public partial class DeviceDetailsViewModel:ObservableObject
         //BusyText = busyText ?? "Processing...";
         try
         {
-            await operation?.Invoke();
+            await operation.Invoke();
         }
-        catch(Exception ex)
+        catch (Exception)
         {
-                
+            throw new Exception();
         }
         finally
         {
@@ -89,42 +97,79 @@ public partial class DeviceDetailsViewModel:ObservableObject
         await ExecuteAsync(async () =>
         {
             var drivers = await _context.GetAllAsync<Driver>();
-            if (drivers is not null && drivers.Any())
+            var enumerable = drivers as Driver[] ?? drivers.ToArray();
+            if (enumerable.Any())
             {
-                _drivers ??= new ObservableCollection<Driver>();
-                _drivers.Clear();
-                foreach (var driver in drivers)
+                Drivers.Clear();
+                foreach (var driver in enumerable)
                 {
-                    if (_drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
+                    if (Drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
                     {
-                        _drivers.Add(driver);
+                        Drivers.Add(driver);
                     }
                 }
             }
 
-            Driver = _drivers.FirstOrDefault(p => p.driver_id == _driver.driver_id);
+            var currDriver = Drivers.FirstOrDefault(p => p.driver_id == Driver.driver_id);
+            if (currDriver != null)
+            {
+                Driver.driver_name = currDriver.driver_name;
+                Driver.driver_ip = currDriver.driver_ip;
+                Driver.driver_port = currDriver.driver_port;
+            }
         });
     }
 
     [RelayCommand]
-    public async Task EditDeviceAsync()
+    private async Task EditDeviceAsync()
     {
-        Driver currDeviceDriver = new Driver();
-        currDeviceDriver = _driver;
-        Device currDevice = new Device();
-        currDevice = _device;
-        if (currDevice == null || currDeviceDriver == null)
+        Driver currDeviceDriver = Driver;
+        Device currDevice = Device;
+        await Shell.Current.GoToAsync(nameof(EditDevicePage), true, new Dictionary<string, object>
         {
-            await Shell.Current.DisplayAlert("Details error", "No details found about this device", "Ok");
-        }
-        else
+            { "Device", currDevice },
+            { "Driver", currDeviceDriver }
+        });
+    }
+
+    [RelayCommand]
+    private async Task RunDeviceAsync()
+    {
+        await ExecuteAsync(async () =>
         {
-            await Shell.Current.GoToAsync(nameof(EditDevicePage), true, new Dictionary<string, object>
+            if (Device.device_status == 0)
             {
-                { "Device", currDevice },
-                { "Driver", currDeviceDriver }
-            });
-        }
+                _driverManager.StartDriverByName(Driver.driver_name);
+                Device.device_status = 1;
+                var updDevice = Device.Clone();
+                await _context.UpdateItemAsync(updDevice);
+                await Shell.Current.DisplayAlert("Device is running", "Device is started.", "Ok");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Attempt to start a working device", "This device is already launched.", "Ok");
+            }
+        });
+    }
+
+    [RelayCommand]
+    private async Task StopDeviceAsync()
+    {
+        await ExecuteAsync(async() =>
+        {
+            if (Device.device_status == 1)
+            {
+                _driverManager.StopDriverByName(Driver.driver_name);
+                Device.device_status = 0;
+                var updDevice = Device.Clone();
+                await _context.UpdateItemAsync(updDevice);
+                await Shell.Current.DisplayAlert("Device is stopped", "Device is stopped.", "Ok");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Attempt to stop a stopped device", "This device is already stopped.", "Ok");
+            }
+        });
     }
     
 }

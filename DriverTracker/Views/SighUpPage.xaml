@@ -6,63 +6,61 @@
              x:Class="DriverTracker.Views.SighUpPage">
     
     <ContentPage.Content>
-        
         <StackLayout BackgroundColor="#e6e6e6">
-            <Grid>
-                <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
-                    <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0"/>
-                </StackLayout>
-                <StackLayout Padding="0" Margin="10,100,10,0" HorizontalOptions="FillAndExpand">
-                    <Frame  BackgroundColor="White" HeightRequest="500" HasShadow="True" Padding="0" Margin="0">
-
-                        <StackLayout>
-                            <StackLayout Margin="10">
-                                <Label Text="SIGN UP" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
-                            </StackLayout>
-
-                            <ScrollView>
-                                <StackLayout>
-
-                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Login:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
-                                            <Entry Placeholder="Login" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NewUser.user_login}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
-                                        </StackLayout>
-                                    </Frame>
-
-                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Name:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
-                                            <Entry Placeholder="Name" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NewUser.user_name}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
-                                            </StackLayout>
-                                    </Frame>
-                                    
-                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Password:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
-                                            <Entry Placeholder="Password"  Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NewUser.user_password}" IsPassword = "True" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
-                                        </StackLayout>
-                                    </Frame>
-                                    
-                                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="Confirm password:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
-                                            <Entry Placeholder="Confirm password" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=UserConfirmedPassword}" IsPassword = "True" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
-                                        </StackLayout>
-                                    </Frame>
-
-                                   <Button Text="SIGN UP" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=SaveUserCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="15">
-                                       <Label Text="Already have an account ? " TextColor="DarkGray" FontSize="Small"/>
-                                       <Button Text="Sign In" TextColor="CadetBlue"  BackgroundColor="White" FontAttributes="Bold" FontSize="Small" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NavigateToSighInCommand}" />
-                                    </StackLayout>
-                                    
+           <ScrollView Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="400">
+                <Grid>
+                    <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
+                     <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0"/>
+                    </StackLayout>
+                    <StackLayout Padding="0" Margin="10,60,10,0" HorizontalOptions="FillAndExpand">
+                        <Frame  BackgroundColor="White" HeightRequest="400" HasShadow="True" Padding="0" Margin="0">
+                            <StackLayout>
+                                <StackLayout Margin="10">
+                                    <Label Text="SIGN UP" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
                                 </StackLayout>
-                            </ScrollView>
-                        </StackLayout>
-                    </Frame>
-                </StackLayout>
-            </Grid>
+                                <ScrollView>
+                                    <StackLayout>
+                                        <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="Login:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                                <Entry Placeholder="Login" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NewUser.user_login}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                            </StackLayout>
+                                        </Frame>
+
+                                        <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="Name:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                                <Entry Placeholder="Name" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NewUser.user_name}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                                </StackLayout>
+                                        </Frame>
+                                        
+                                        <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="Password:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                                <Entry Placeholder="Password"  Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NewUser.user_password}" IsPassword = "True" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                            </StackLayout>
+                                        </Frame>
+                                        
+                                        <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Margin="0,15,0,0" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="Confirm password:" Padding = "5,10, 5, 0" TextColor="CadetBlue" FontSize= "16" FontAttributes="Bold"/>
+                                                <Entry Placeholder="Confirm password" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=UserConfirmedPassword}" IsPassword = "True" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                            </StackLayout>
+                                        </Frame>
+
+                                       <Button Text="SIGN UP" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=SaveUserCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                           <Label Text="Already have an account ? " TextColor="DarkGray" FontSize="Small"  Padding="15"/>
+                                           <Button Text="Sign In" TextColor="CadetBlue"  BackgroundColor="White" FontAttributes="Bold" FontSize="Small" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SighUpPageViewModel}}, Path=NavigateToSighInCommand}" />
+                                        </StackLayout>
+                                        
+                                    </StackLayout>
+                                </ScrollView>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </Grid>
+           </ScrollView> 
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
