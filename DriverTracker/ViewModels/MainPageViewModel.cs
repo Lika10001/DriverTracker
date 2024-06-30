@@ -13,7 +13,7 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Device> _devices = new();
     [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
     
-    private DriverManager _driverManager = new();
+    private readonly DriverManager _driverManager = new();
   
     private readonly AppDbContext _context = new ();
 
@@ -23,15 +23,15 @@ public partial class MainPageViewModel : ObservableObject
         await ExecuteAsync(async () =>
         {
             Device currDevice = new();
-            List<Device> devicesForUpdating = new List<Device>(Devices);
+            List<Device> devicesForUpdating = [..Devices];
             foreach (var device in devicesForUpdating)
             {
                 if (device.device_status == 1)
                 {
                     try
                     {
-                        _driverManager.StopDriverByName(
-                            (Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id)).driver_name);
+                        var currDriver = Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
+                        if (currDriver != null) _driverManager.StopDriverByName(currDriver.driver_name);
                         currDevice.device_id = device.device_id;
                         currDevice.device_name = device.device_name;
                         currDevice.device_status = 0;
@@ -51,8 +51,8 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     private async Task GoToDetailsPage(Device device)
     {
-        Driver currDeviceDriver = Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
-        if (device == null || currDeviceDriver == null)
+        var currDeviceDriver = Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
+        if (currDeviceDriver == null)
         {
             await Shell.Current.DisplayAlert("Details error", "No details found about this device", "Ok");
         }
@@ -66,15 +66,16 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
     
-    public async Task LoadDriversFromBD()
+    public async Task LoadDriversFromBd()
     {
         await ExecuteAsync(async () =>
         {
             var drivers = await _context.GetAllAsync<Driver>();
-            if (drivers is not null && drivers.Any())
+            var enumerable = drivers as Driver[] ?? drivers.ToArray();
+            if (enumerable.Any())
             {
                 Drivers.Clear();
-                foreach (var driver in drivers)
+                foreach (var driver in enumerable)
                 {
                     if (Drivers.FirstOrDefault(p=>p.driver_id == driver.driver_id) == null)
                     {
@@ -129,11 +130,11 @@ public partial class MainPageViewModel : ObservableObject
         await ExecuteAsync(async () =>
         {
             var devices = await _context.GetAllAsync<Device>();
-            if (devices is not null && devices.Any())
+            var enumerable = devices as Device[] ?? devices.ToArray();
+            if (enumerable.Any())
             {
-                Devices ??= new ObservableCollection<Device>();
                 Devices.Clear();
-                foreach (var device in devices)
+                foreach (var device in enumerable)
                 {
                     if (Devices.FirstOrDefault(p=>p.device_id == device.device_id) == null)
                     {
@@ -153,7 +154,7 @@ public partial class MainPageViewModel : ObservableObject
                 {
                     var deviceCopy = device.Clone();
                     var oldDevice = Devices.FirstOrDefault(p=>p.device_id == device.device_id);
-                    var index = Devices.IndexOf(oldDevice);
+                    var index = Devices.IndexOf(oldDevice ?? throw new InvalidOperationException());
                     Devices.RemoveAt(index);
                     Devices.Insert(index, deviceCopy);
                 }
@@ -171,11 +172,11 @@ public partial class MainPageViewModel : ObservableObject
         //BusyText = busyText ?? "Processing...";
         try
         {
-            await operation?.Invoke();
+            await operation.Invoke();
         }
-        catch(Exception ex)
+        catch(Exception)
         {
-                
+            throw new Exception();
         }
         finally
         {
@@ -194,8 +195,14 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     private async Task NavigateToSighInPageAsync()
     {
-        await Shell.Current.GoToAsync(nameof(SighInPage), true);
+        try
+        {
+            await Shell.Current.GoToAsync("///SighInPage", true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
-
     
 }

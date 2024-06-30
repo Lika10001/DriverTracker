@@ -35,6 +35,7 @@
                         </Frame>
                     </HorizontalStackLayout>
                 </Frame>
+                <Button Text="Sigh out" BackgroundColor="IndianRed" CornerRadius="25"  Margin="0" Padding="60, 0, 20, 0" Command="{Binding  Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToSighInPageCommand}" TextColor="White" FontAttributes="None" HorizontalOptions="FillAndExpand" />
             </HorizontalStackLayout>
             <Grid>
                 <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">

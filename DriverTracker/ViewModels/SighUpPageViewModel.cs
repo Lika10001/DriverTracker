@@ -20,9 +20,16 @@ public partial class SighUpPageViewModel:ObservableObject
     
     [RelayCommand]
     private async Task NavigateToSighInAsync() {
-        
-        await Shell.Current.GoToAsync(nameof(SighInPage), true);
-        
+
+        try
+        {
+            await Shell.Current.GoToAsync("///SighInPage", true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
     }
 
     [RelayCommand]
@@ -30,26 +37,26 @@ public partial class SighUpPageViewModel:ObservableObject
     {
         await LoadUsersAsync();
 
-        if (_newUser.IsUserDataNull())
+        if (NewUser.IsUserDataNull())
         {
             await Shell.Current.DisplayAlert("Validation Error", "One of the fields is empty.", "Ok");
             return;
         }
 
-        if (!(Validator.IsLoginValid(_newUser.user_login) && Validator.IsPasswordValid(_newUser.user_password)))
+        if (!(Validator.IsLoginValid(NewUser.user_login) && Validator.IsPasswordValid(NewUser.user_password)))
         {
             await Shell.Current.DisplayAlert("Validation Error", "Password or Login is too short.", "Ok");
             return;
         }
 
-        if (_newUser.user_password != _userConfirmedPassword)
+        if (NewUser.user_password != UserConfirmedPassword)
         {
             await Shell.Current.DisplayAlert("Validation Error", "Your password is not equal to confirmed password.",
                 "Ok");
             return;
         }
 
-        if (_users.Any(p => p.user_login == _newUser.user_login))
+        if (_users.Any(p => p.user_login == NewUser.user_login))
         {
             await Shell.Current.DisplayAlert("Validation Error", "This login already exists. Choose another one.",
                 "Ok");
@@ -58,11 +65,10 @@ public partial class SighUpPageViewModel:ObservableObject
 
         await ExecuteAsync(async () =>
         {
-            // Create user
             try
             {
-                await _context.AddItemAsync<User>(_newUser);
-                _users.Add(_newUser);
+                await _context.AddItemAsync(NewUser);
+                _users.Add(NewUser);
                 await Shell.Current.GoToAsync(nameof(MainPage), true);
                 await Shell.Current.DisplayAlert("Successful sigh up", "Your account has been successfully created.",
                     "Ok");
@@ -80,11 +86,11 @@ public partial class SighUpPageViewModel:ObservableObject
         await ExecuteAsync(async () =>
         {
             var users = await _context.GetAllAsync<User>();
-            if (users is not null && users.Any())
+            var enumerable = users as User[] ?? users.ToArray();
+            if (enumerable.Any())
             {
-                _users ??= new ObservableCollection<User>();
                 _users.Clear();
-                foreach (var user in users)
+                foreach (var user in enumerable)
                 {
                     _users.Add(user);
                 }
@@ -98,11 +104,11 @@ public partial class SighUpPageViewModel:ObservableObject
             //BusyText = busyText ?? "Processing...";
             try
             {
-                await operation?.Invoke();
+                await operation.Invoke();
             }
             catch(Exception ex)
             {
-                
+                throw new Exception();
             }
             finally
             {

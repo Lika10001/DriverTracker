@@ -15,6 +15,6 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         _ = _viewModel.LoadDevicesAsync();
-        _ = _viewModel.LoadDriversFromBD();
+        _ = _viewModel.LoadDriversFromBd();
     }
 }
