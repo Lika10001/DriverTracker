@@ -67,7 +67,7 @@ public partial class AddDeviceViewModel : ObservableObject
                                                 &&  p.driver_ip == ChosenDriver.driver_ip
                                                 && p.driver_port == ChosenDriver.driver_port) == null)
                {
-                   await _context.AddItemAsync<Driver>(ChosenDriver);
+                   await _context.AddItemAsync(ChosenDriver);
                    Drivers.Add(ChosenDriver);
                    NewDevice.device_driver_id = Drivers.Count;
                   
@@ -77,9 +77,9 @@ public partial class AddDeviceViewModel : ObservableObject
                    var existDriver= Drivers.FirstOrDefault(p => p.driver_name == ChosenDriver.driver_name
                                                                 && p.driver_ip == ChosenDriver.driver_ip
                                                                 && p.driver_port == ChosenDriver.driver_port);
-                   NewDevice.device_driver_id = existDriver.driver_id;
+                   if (existDriver != null) NewDevice.device_driver_id = existDriver.driver_id;
                }
-               await _context.AddItemAsync<Device>(NewDevice);
+               await _context.AddItemAsync(NewDevice);
                 Devices.Add(NewDevice);
                 await Shell.Current.GoToAsync(nameof(MainPage), true);
                 await Shell.Current.DisplayAlert("Success", "Your device has been successfully created.",
@@ -108,16 +108,17 @@ public partial class AddDeviceViewModel : ObservableObject
         });
     }
     
-    public async Task LoadDevicesAsync()
+    private async Task LoadDevicesAsync()
     {
         await ExecuteAsync(async () =>
         {
             var devices = await _context.GetAllAsync<Device>();
-            if (devices is not null && devices.Any())
+            var enumerable = devices as Device[] ?? devices.ToArray();
+            if (enumerable.Any())
             {
-                Devices ??= new ObservableCollection<Device>();
                 Devices.Clear();
-                foreach (var device in devices)
+                
+                foreach (var device in enumerable)
                 {
                     if (Devices.FirstOrDefault(p=> p.device_id == device.device_id) == null)
                     {
@@ -133,11 +134,11 @@ public partial class AddDeviceViewModel : ObservableObject
         await ExecuteAsync(async () =>
         {
             var drivers = await _context.GetAllAsync<Driver>();
-            if (drivers is not null && drivers.Any())
+            var enumerable = drivers as Driver[] ?? drivers.ToArray();
+            if (enumerable.Any())
             {
-                Drivers ??= new ObservableCollection<Driver>();
                 Drivers.Clear();
-                foreach (var driver in drivers)
+                foreach (var driver in enumerable)
                 {
                     if (Drivers.FirstOrDefault(p => p.driver_id == driver.driver_id) == null)
                     {
@@ -155,7 +156,7 @@ public partial class AddDeviceViewModel : ObservableObject
         //BusyText = busyText ?? "Processing...";
         try
         {
-            await operation?.Invoke();
+            await operation.Invoke();
         }
         catch(Exception ex)
         {

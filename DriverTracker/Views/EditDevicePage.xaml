@@ -12,29 +12,38 @@
                          <Image Source="main_devices.jpg" Aspect="AspectFill" Margin="0"/>
                      </Frame>    
                  </StackLayout>
-                 <StackLayout Padding="0" Margin="50,80,50,0" HorizontalOptions="FillAndExpand">
-                     <Frame  BackgroundColor="White" HeightRequest="550" HasShadow="True" Padding="0" Margin="0">
+                 <StackLayout Padding="0" Margin="50,20,50,0" HorizontalOptions="FillAndExpand">
+                     <Frame  BackgroundColor="White" HeightRequest="610" HasShadow="True" Padding="0" Margin="0">
                         <StackLayout>
                             <StackLayout Margin="10">
                                 <Label Text="Edit Device" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>
                             </StackLayout>
-                            <ScrollView Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <ScrollView Orientation="Horizontal" HeightRequest="550" HorizontalOptions="FillAndExpand">
                                 <StackLayout>
                                     <StackLayout Margin="10">
-                                        <Label Text="Device name" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="20,0 ,0,0"/>
+                                        <Label Text="Device name" Margin="20, 0, 0,0" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                                         <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
                                             <StackLayout>
                                                 <Entry Placeholder="Device name" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:EditDeviceViewModel}}, Path=Device.device_name}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
                                             </StackLayout>
                                         </Frame>
                                     </StackLayout>
+                                    
+                                    <StackLayout Margin="10">
+                                        <Label Text="Device information" Margin="20, 0, 0, 0" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                        <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30">
+                                            <StackLayout>
+                                                <Editor HeightRequest="70" Placeholder="Device information" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:EditDeviceViewModel}}, Path=Device.device_info}" TextColor="CadetBlue" FontAttributes="None" HorizontalOptions="FillAndExpand" Margin="0,0,20,0"/>
+                                            </StackLayout>
+                                        </Frame>
+                                    </StackLayout>
                                    
                                     <StackLayout Margin="10">
-                                       
-                                       <Label Text="Initial driver" Margin="20, 0,0,0" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                                       <Label Text="{Binding Driver.driver_name}" Margin="20, 0,0,0" FontSize= "18" TextColor="CadetBlue" HorizontalOptions="FillAndExpand"/>
-                                       
-                                        <Label Text="Chosen driver" Margin="20, 0,0,0" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                       <HorizontalStackLayout>
+                                            <Label Text="Initial driver" Margin="20, 0, 10, 0" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                            <Label Text="{Binding Driver.driver_name}"  FontSize= "20" TextColor="Green" HorizontalOptions="FillAndExpand"/>
+                                       </HorizontalStackLayout>
+                                        <Label Text="Chosen driver" Margin="20, 0,0,0" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                                         <Picker x:Name="DriverPicker" ItemsSource="{Binding Path=DriverNames}"
                                                 SelectedItem="{Binding   Driver.driver_name, Mode=TwoWay}">
                                         </Picker>

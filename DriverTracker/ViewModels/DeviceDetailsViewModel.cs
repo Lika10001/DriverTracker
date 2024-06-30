@@ -69,6 +69,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
                 Device.device_status = currDevice.device_status;
                 Device.device_driver_id = currDevice.device_driver_id;
                 Device.device_name = currDevice.device_name;
+                Device.device_info = currDevice.device_info;
             }
         });
     }

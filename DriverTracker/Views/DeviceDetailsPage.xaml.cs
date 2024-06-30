@@ -11,9 +11,9 @@ public partial class DeviceDetailsPage
         BindingContext = _viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
-        _=_viewModel.LoadDevicesAsync();
-        _ = _viewModel.LoadDriversAsync();
+        await _viewModel.LoadDevicesAsync();
+        await _viewModel.LoadDriversAsync();
     }
 }

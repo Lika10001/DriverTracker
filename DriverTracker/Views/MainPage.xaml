@@ -79,7 +79,7 @@
                                                             <Label Text="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_name}" FontSize= "22" TextColor="CadetBlue" FontAttributes="Bold" Padding="35"/>
                                                         <StackLayout Padding="30">
                                                             <!--Toggled="switcher_Toggled"-->
-                                                            <Switch x:Name="Switcher" WidthRequest="100"
+                                                            <Switch x:Name="Switcher" WidthRequest="100" IsEnabled="False"
                                                                 HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource StatusConverter}}"
                                                                 />
                                                         </StackLayout>

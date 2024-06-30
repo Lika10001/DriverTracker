@@ -58,8 +58,13 @@
                         <Frame BackgroundColor="White" HeightRequest="300" BorderColor="DarkGray" Padding="10,10,10,10" Margin="50,20,50,0" HorizontalOptions="Center" CornerRadius="50">
                         <StackLayout>
                             <HorizontalStackLayout HorizontalOptions="Center">
+                                <Label Text="Device info:" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
+                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_info}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout HorizontalOptions="Center">
                                 <Label Text="Is device on" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
-                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_status, Converter={StaticResource StatusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                <Label Text="{Binding Device.device_status, Converter={StaticResource StatusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                             </HorizontalStackLayout>
                             
                             <HorizontalStackLayout HorizontalOptions="Center">

@@ -8,7 +8,9 @@ public class Device
     public string device_name { get; set; }
     public int device_driver_id { get; set; }
     public int device_status { get; set; }
-    
+
+    public string device_info { get; set; }
+
     public bool IsDeviceDataNull()
     {
         return (device_name == null || device_driver_id == null || device_status == null

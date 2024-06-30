@@ -18,12 +18,12 @@ public partial class MainPageViewModel : ObservableObject
     private readonly AppDbContext _context = new ();
 
     [RelayCommand]
-    public async Task StopAllDrivers()
+    private async Task StopAllDrivers()
     {
         await ExecuteAsync(async () =>
         {
             Device currDevice = new();
-            List<Device> devicesForUpdating = new List<Device>(_devices);
+            List<Device> devicesForUpdating = new List<Device>(Devices);
             foreach (var device in devicesForUpdating)
             {
                 if (device.device_status == 1)
@@ -31,7 +31,7 @@ public partial class MainPageViewModel : ObservableObject
                     try
                     {
                         _driverManager.StopDriverByName(
-                            (_drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id)).driver_name);
+                            (Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id)).driver_name);
                         currDevice.device_id = device.device_id;
                         currDevice.device_name = device.device_name;
                         currDevice.device_status = 0;
@@ -49,10 +49,9 @@ public partial class MainPageViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public async Task GoToDetailsPage(Device device)
+    private async Task GoToDetailsPage(Device device)
     {
-        Driver currDeviceDriver = new Driver();
-        currDeviceDriver = _drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
+        Driver currDeviceDriver = Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
         if (device == null || currDeviceDriver == null)
         {
             await Shell.Current.DisplayAlert("Details error", "No details found about this device", "Ok");
@@ -74,13 +73,12 @@ public partial class MainPageViewModel : ObservableObject
             var drivers = await _context.GetAllAsync<Driver>();
             if (drivers is not null && drivers.Any())
             {
-                _drivers ??= new ObservableCollection<Driver>();
-                _drivers.Clear();
+                Drivers.Clear();
                 foreach (var driver in drivers)
                 {
-                    if (_drivers.FirstOrDefault(p=>p.driver_id == driver.driver_id) == null)
+                    if (Drivers.FirstOrDefault(p=>p.driver_id == driver.driver_id) == null)
                     {
-                        _drivers.Add(driver);
+                        Drivers.Add(driver);
                     }
                 }
             }
@@ -88,19 +86,19 @@ public partial class MainPageViewModel : ObservableObject
     }
     
     [RelayCommand]
-    public async Task RunDriversForDevices()
+    private async Task RunDriversForDevices()
     {
         await ExecuteAsync(async () =>
         {
             Device currDevice = new();
-            List<Device> devicesForUpdating = new List<Device>(_devices);
+            List<Device> devicesForUpdating = [..Devices];
             foreach (var device in devicesForUpdating)
             {
                 if (device.device_status == 0){
                     try
                     {
                         var driver =
-                            _drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
+                            Drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
                         if (driver != null)
                         {
                             _driverManager.StartDriverByName(driver.driver_name);
@@ -133,13 +131,13 @@ public partial class MainPageViewModel : ObservableObject
             var devices = await _context.GetAllAsync<Device>();
             if (devices is not null && devices.Any())
             {
-                _devices ??= new ObservableCollection<Device>();
-                _devices.Clear();
+                Devices ??= new ObservableCollection<Device>();
+                Devices.Clear();
                 foreach (var device in devices)
                 {
-                    if (_devices.FirstOrDefault(p=>p.device_id == device.device_id) == null)
+                    if (Devices.FirstOrDefault(p=>p.device_id == device.device_id) == null)
                     {
-                        _devices.Add(device);
+                        Devices.Add(device);
                     }
                 }
             }
@@ -154,10 +152,10 @@ public partial class MainPageViewModel : ObservableObject
                 if(await _context.UpdateItemAsync<Device>(device))
                 {
                     var deviceCopy = device.Clone();
-                    var oldDevice = _devices.FirstOrDefault(p=>p.device_id == device.device_id);
-                    var index = _devices.IndexOf(oldDevice);
-                    _devices.RemoveAt(index);
-                    _devices.Insert(index, deviceCopy);
+                    var oldDevice = Devices.FirstOrDefault(p=>p.device_id == device.device_id);
+                    var index = Devices.IndexOf(oldDevice);
+                    Devices.RemoveAt(index);
+                    Devices.Insert(index, deviceCopy);
                 }
                 else
                 {

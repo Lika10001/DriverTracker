@@ -116,7 +116,7 @@ public partial class EditDeviceViewModel : ObservableObject
             return;
         }
         
-        if (Driver.driver_name == "")
+        if (Driver.driver_name =="")
         {
             await Shell.Current.DisplayAlert("Validation Error", "Driver name is empty.", "Ok");
             return;
@@ -126,6 +126,11 @@ public partial class EditDeviceViewModel : ObservableObject
         {
             await Shell.Current.DisplayAlert("Validation Error", "Driver ip or port is incorrect.", "Ok");
             return;
+        }
+
+        if (Driver.driver_name == null)
+        {
+            Driver.driver_name = DriverNames[DriverIndexForPicker];
         }
 
         await ExecuteAsync(async () =>
