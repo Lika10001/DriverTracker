@@ -4,29 +4,32 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DriverTracker.ViewModels"
              xmlns:classes="clr-namespace:DriverTracker.Classes"
-             x:Class="DriverTracker.Views.DeviceDetailsPage">
+             x:Class="DriverTracker.Views.DeviceDetailsPage"
+             x:DataType="vm:DeviceDetailsViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
             <classes:IntToBoolResString x:Key="StatusConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:DeviceDetailsViewModel />
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <VerticalStackLayout>
+        <StackLayout HorizontalOptions="FillAndExpand">
             <Grid>
                 <StackLayout>
                     <Frame  BackgroundColor="PeachPuff" HeightRequest="550" HasShadow="True" Padding="0" Margin="0,150,0,0">
                         <Image Source="main_devices.jpg" Aspect="AspectFill"/>
                     </Frame>
                </StackLayout>
-                <VerticalStackLayout>
-                    <ScrollView>
-                        <Grid RowDefinitions="Auto, Auto, *">
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <StackLayout>
+                    <Grid RowDefinitions="Auto, Auto, *">
                             <BoxView
                                 BackgroundColor="CadetBlue"
                                 Grid.RowSpan="2"
                                 HorizontalOptions="Fill"
                                 VerticalOptions="Fill"/>
-                            
 
                             <Border StrokeShape="RoundRectangle 80"
                                     Stroke="White"
@@ -48,15 +51,14 @@
                                    TextColor="White"
                                    FontAttributes="Bold"
                                    FontSize= "22"
-                                   Text="{Binding Device.device_name}" 
+                                   Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_name}" 
                                    HorizontalOptions="Center"
                                    Margin="0,0,0,8"/>
                         </Grid>
-                    </ScrollView>
-                    
-                    <ScrollView>
-                        <Frame BackgroundColor="White" HeightRequest="300" BorderColor="DarkGray" Padding="10,10,10,10" Margin="50,20,50,0" HorizontalOptions="Center" CornerRadius="50">
-                        <StackLayout>
+                    </StackLayout>   
+                    <Frame BackgroundColor="White" HeightRequest="400" WidthRequest="400" BorderColor="DarkGray" Padding="10,10,10,10" Margin="0,20,0,0" HorizontalOptions="Center" CornerRadius="50">
+                    <ScrollView HeightRequest="400" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                        <StackLayout HorizontalOptions="FillAndExpand">
                             <HorizontalStackLayout HorizontalOptions="Center">
                                 <Label Text="Device info:" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
                                 <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_info}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
@@ -64,7 +66,7 @@
                             
                             <HorizontalStackLayout HorizontalOptions="Center">
                                 <Label Text="Is device on" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
-                                <Label Text="{Binding Device.device_status, Converter={StaticResource StatusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                <Label Text="{Binding Source ={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_status, Converter={StaticResource StatusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
                             </HorizontalStackLayout>
                             
                             <HorizontalStackLayout HorizontalOptions="Center">
@@ -87,17 +89,15 @@
                                 <Button Text="Edit Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=EditDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" />
                                 <Button Text="Delete Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=DeleteDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" />
                             </HorizontalStackLayout>
+                            <VerticalStackLayout Margin="10">
+                                <Label Text="Logs" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="Center" FontAttributes="Bold"/>
+                                <Label Text ="logss" HeightRequest="150"  />
+                            </VerticalStackLayout>
                             </StackLayout>
-                            </Frame>
-                    </ScrollView>
-                    <!--                 
-                                 
-                   <StackLayout Margin="10">
-                        <Label Text="Logs" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                    </StackLayout>-->
-                    
-                </VerticalStackLayout>
+                   </ScrollView>
+                    </Frame>
+                </StackLayout>
             </Grid>
-        </VerticalStackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

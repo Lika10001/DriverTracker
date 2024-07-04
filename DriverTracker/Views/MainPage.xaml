@@ -4,12 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DriverTracker.ViewModels"
              xmlns:models="clr-namespace:DriverTracker.Models"
-             xmlns:classes="clr-namespace:DriverTracker.Classes"
              x:Class="DriverTracker.Views.MainPage">
     <ContentPage.Resources>
-        <ResourceDictionary>
-            <classes:IntToBooleanConverter x:Key="StatusConverter" />
-        </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
@@ -24,18 +20,18 @@
                         <Frame BackgroundColor="IndianRed" BorderColor="IndianRed" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="25" Margin="20, 10, 0, 10">
                             <Grid>
                                 <StackLayout Orientation="Horizontal" Margin="0">
-                                    <Button Text="Sigh out" BackgroundColor="IndianRed" CornerRadius="25"  Margin="0" Padding="60, 0, 20, 0" Command="{Binding  Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToSighInPageCommand}" TextColor="White" FontAttributes="None" HorizontalOptions="FillAndExpand" />
-                                </StackLayout>
-                                <StackLayout Orientation="Horizontal" Margin="0">
                                     <Frame BackgroundColor="IndianRed" HeightRequest="47" WidthRequest="47" CornerRadius="25" Padding="0" Margin="0">
                                         <Image Source="avatar.png" Aspect="AspectFill" Margin="0"/>
                                     </Frame>
+                                </StackLayout>
+                                
+                                <StackLayout Orientation="Horizontal" Margin="0">
+                                    <Button Text="Sigh out" BackgroundColor="Transparent" CornerRadius="25"  Margin="0" Padding="60, 0, 20, 0" Command="{Binding  Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToSighInPageCommand}" TextColor="White" FontAttributes="None" HorizontalOptions="FillAndExpand" />
                                 </StackLayout>
                             </Grid>
                         </Frame>
                     </HorizontalStackLayout>
                 </Frame>
-                <Button Text="Sigh out" BackgroundColor="IndianRed" CornerRadius="25"  Margin="0" Padding="60, 0, 20, 0" Command="{Binding  Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=NavigateToSighInPageCommand}" TextColor="White" FontAttributes="None" HorizontalOptions="FillAndExpand" />
             </HorizontalStackLayout>
             <Grid>
                 <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
@@ -80,8 +76,8 @@
                                                             <Label Text="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_name}" FontSize= "22" TextColor="CadetBlue" FontAttributes="Bold" Padding="35"/>
                                                         <StackLayout Padding="30">
                                                             <!--Toggled="switcher_Toggled"-->
-                                                            <Switch x:Name="Switcher" WidthRequest="100" IsEnabled="False"
-                                                                HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status, Converter={ StaticResource StatusConverter}}"
+                                                            <Switch x:Name="Switcher" WidthRequest="100"
+                                                                HeightRequest="50" IsToggled="{Binding Source={RelativeSource AncestorType={x:Type models:Device}}, Path=device_status}"
                                                                 />
                                                         </StackLayout>
                                                         </HorizontalStackLayout>

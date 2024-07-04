@@ -10,10 +10,10 @@ namespace DriverTracker.ViewModels;
 public partial class SighInViewModel: ObservableObject
 {
     [ObservableProperty]
-    private string? _userName;
+    private string _userName = String.Empty;
 
     [ObservableProperty] 
-    private string? _userPassword;
+    private string _userPassword =String.Empty;
     
     private readonly AppDbContext _context = new();
     
@@ -24,10 +24,11 @@ public partial class SighInViewModel: ObservableObject
         await ExecuteAsync(async () =>
         {
             var users = await _context.GetAllAsync<User>();
-            if (users is not null && users.Any())
+            var enumerable = users as User[] ?? users.ToArray();
+            if (enumerable.Any())
             {
-                _users ??= new ObservableCollection<User>();
-                foreach (var user in users)
+                _users.Clear();
+                foreach (var user in enumerable)
                 {
                     _users.Add(user);
                 }
@@ -39,7 +40,7 @@ public partial class SighInViewModel: ObservableObject
     private async Task NavigateAsync(){
         if (Validator.IsLoginValid(UserName) && Validator.IsPasswordValid(UserPassword)) {
             
-            if (_users.Any(p=>p.user_login == _userName && p.user_password == _userPassword))
+            if (_users.Any(p=>p.user_login == UserName && p.user_password == UserPassword))
             {
                 await Shell.Current.GoToAsync(nameof(MainPage), true);
             }
@@ -67,7 +68,7 @@ public partial class SighInViewModel: ObservableObject
             //BusyText = busyText ?? "Processing...";
             try
             {
-                await operation?.Invoke();
+                await operation.Invoke();
             }
             catch(Exception ex)
             {

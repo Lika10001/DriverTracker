@@ -4,7 +4,7 @@ namespace DriverTracker.Views;
 
 public partial class SighUpPage
 {
-    private SighUpPageViewModel? _viewModel = new();
+    private SighUpPageViewModel _viewModel = new();
     public SighUpPage()
     {
         InitializeComponent();
@@ -13,9 +13,9 @@ public partial class SighUpPage
         //_viewModel = viewModel;
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
-        _ = _viewModel.LoadUsersAsync();
+        await _viewModel.LoadUsersAsync();
         _viewModel.NewUser = new();
     }
 }

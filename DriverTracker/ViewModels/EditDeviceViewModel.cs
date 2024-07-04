@@ -104,6 +104,7 @@ public partial class EditDeviceViewModel : ObservableObject
     private async Task EditDeviceAndDriverAsync()
     {
         await LoadDevicesAsync();
+        await LoadDriversAsync();
          if (Device.IsDeviceNameNull())
         {
             await Shell.Current.DisplayAlert("Validation Error", "One of the fields is empty.", "Ok");
@@ -132,46 +133,51 @@ public partial class EditDeviceViewModel : ObservableObject
         {
             Driver.driver_name = DriverNames[DriverIndexForPicker];
         }
-
+        
         await ExecuteAsync(async () =>
         {
             try
             {
-               if (Drivers.FirstOrDefault(p => p.driver_name == Driver.driver_name
-                                                &&  p.driver_ip == Driver.driver_ip
-                                                && p.driver_port == Driver.driver_port) == null)
-               {
-                   await _context.AddItemAsync(Driver);
-                   Drivers.Add(Driver);
-                   Device.device_driver_id = Drivers.Count;
-                  
-               }
-               else
-               {
-                   var existDriver= Drivers.FirstOrDefault(p => p.driver_name == Driver.driver_name
-                                                                && p.driver_ip == Driver.driver_ip
-                                                                && p.driver_port == Driver.driver_port);
-                   Device.device_driver_id = existDriver.driver_id;
-               }
+                var driverInList = Drivers.FirstOrDefault(p => p.driver_name == Driver.driver_name);
+                int index;
+                if (driverInList != null && (Driver.driver_port != driverInList.driver_port || Driver.driver_ip != driverInList?.driver_ip))
+                {
+                    Driver.driver_id = driverInList.driver_id;
+                    await _context.UpdateItemAsync(Driver);
+                    var oldDriver = Drivers.FirstOrDefault(p=>p.driver_id == Driver.driver_id);
+                    if (oldDriver != null)
+                    {
+                        index = Drivers.IndexOf(oldDriver);
+                        Drivers.RemoveAt(index);
+                        Drivers.Insert(index, Driver.Clone());
+                    }
+                }
+
+                var existDriver= Drivers.FirstOrDefault(p => p.driver_name == Driver.driver_name
+                                                             && p.driver_ip == Driver.driver_ip
+                                                             && p.driver_port == Driver.driver_port);
+               if (existDriver != null) Device.device_driver_id = existDriver.driver_id; 
                await _context.UpdateItemAsync(Device);
                var oldDevice = Devices.FirstOrDefault(p=>p.device_id == Device.device_id);
-               var index = Devices.IndexOf(oldDevice);
+               index = Devices.IndexOf(oldDevice);
                Devices.RemoveAt(index);
                Devices.Insert(index, Device.Clone());
-
+               
                var currDevice = Device;
                var currDriver = Driver;
-                await Shell.Current.GoToAsync(nameof(DeviceDetailsPage), true, new Dictionary<string, object>()
-                {
-                    {"Device", currDevice},
-                    {"Driver", currDriver}
-                });
-                await Shell.Current.DisplayAlert("Success", "Your device has been successfully edited.",
-                    "Ok");
+              
+               await Shell.Current.GoToAsync("..", true, new Dictionary<string, object>()
+               {
+                   { "Device", currDevice },
+                   { "Driver", currDriver }
+               });
+               await Shell.Current.DisplayAlert("Success", "Your device has been successfully edited.",
+                   "Ok");
+           
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception();
+                Console.WriteLine(ex.Message);
             }
         });
 

@@ -4,17 +4,24 @@ namespace DriverTracker.Views;
 
 public partial class MainPage : ContentPage
 {
-    public MainPageViewModel _viewModel = new();
+    private readonly MainPageViewModel _viewModel = new();
     public MainPage()
     {
         InitializeComponent();
         BindingContext = _viewModel;
     }
     
-    protected override void OnAppearing()
+    protected async override void OnAppearing()
     {
-        base.OnAppearing();
-        _ = _viewModel.LoadDevicesAsync();
-        _ = _viewModel.LoadDriversFromBd();
+        base.OnAppearing(); 
+        await _viewModel.LoadDevicesAsync();
+        await _viewModel.LoadDriversFromBd();
+        _viewModel.CheckAllDriversForRunning();
+    }
+
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        //_ = _viewModel.StopAllDriversCommand;
     }
 }

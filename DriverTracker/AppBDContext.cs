@@ -21,7 +21,7 @@ public class AppDbContext : IAsyncDisposable
 
         private async Task<AsyncTableQuery<TTable>> GetTableAsync<TTable>() where TTable : class, new()
         {
-            //await CreateTableIfNotExists<TTable>();
+            await CreateTableIfNotExists<TTable>();
             return Database.Table<TTable>();
         }
 

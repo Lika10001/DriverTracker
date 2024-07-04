@@ -48,6 +48,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
         });
     }
     
+    
     public async Task LoadDevicesAsync()
     {
         await ExecuteAsync(async () =>
@@ -62,15 +63,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
                    Devices.Add(device);
                 }
             }
-
-            var currDevice = Devices.FirstOrDefault(p => p.device_id == Device.device_id);
-            if (currDevice != null)
-            {
-                Device.device_status = currDevice.device_status;
-                Device.device_driver_id = currDevice.device_driver_id;
-                Device.device_name = currDevice.device_name;
-                Device.device_info = currDevice.device_info;
-            }
+            
         });
     }
     
@@ -110,14 +103,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
                     }
                 }
             }
-
-            var currDriver = Drivers.FirstOrDefault(p => p.driver_id == Driver.driver_id);
-            if (currDriver != null)
-            {
-                Driver.driver_name = currDriver.driver_name;
-                Driver.driver_ip = currDriver.driver_ip;
-                Driver.driver_port = currDriver.driver_port;
-            }
+            
         });
     }
 
@@ -126,7 +112,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
     {
         Driver currDeviceDriver = Driver;
         Device currDevice = Device;
-        await Shell.Current.GoToAsync(nameof(EditDevicePage), true, new Dictionary<string, object>
+        await Shell.Current.GoToAsync("EditDevicePage", true, new Dictionary<string, object>
         {
             { "Device", currDevice },
             { "Driver", currDeviceDriver }
@@ -138,13 +124,22 @@ public partial class DeviceDetailsViewModel:ObservableObject
     {
         await ExecuteAsync(async () =>
         {
-            if (Device.device_status == 0)
+            if (!_driverManager.IsDriverRunning(Driver.driver_name))
             {
-                _driverManager.StartDriverByName(Driver.driver_name);
-                Device.device_status = 1;
-                var updDevice = Device.Clone();
-                await _context.UpdateItemAsync(updDevice);
-                await Shell.Current.DisplayAlert("Device is running", "Device is started.", "Ok");
+                try
+                {
+                    _driverManager.StartDriverByName(Driver.driver_name);
+                    Device.device_status = true;
+                    var updDevice = Device.Clone();
+                    var index = Devices.IndexOf(updDevice);
+                    Devices.RemoveAt(index);
+                    Devices.Insert(index, updDevice);
+                    await Shell.Current.DisplayAlert("Device is running", "Device is started.", "Ok");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             else
             {
@@ -158,12 +153,22 @@ public partial class DeviceDetailsViewModel:ObservableObject
     {
         await ExecuteAsync(async() =>
         {
-            if (Device.device_status == 1)
+            if (_driverManager.IsDriverRunning(Driver.driver_name))
             {
-                _driverManager.StopDriverByName(Driver.driver_name);
-                Device.device_status = 0;
-                var updDevice = Device.Clone();
-                await _context.UpdateItemAsync(updDevice);
+                try
+                {
+                    _driverManager.StopDriverByName(Driver.driver_name);
+                    Device.device_status = false;
+                    var updDevice = Device.Clone();
+                    var index = Devices.IndexOf(updDevice);
+                    Devices.RemoveAt(index);
+                    Devices.Insert(index, updDevice);
+                 
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 await Shell.Current.DisplayAlert("Device is stopped", "Device is stopped.", "Ok");
             }
             else

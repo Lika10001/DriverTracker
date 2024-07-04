@@ -14,38 +14,31 @@ public partial class MainPageViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
     
     private readonly DriverManager _driverManager = new();
+    private object _lockObject = new();
   
     private readonly AppDbContext _context = new ();
 
     [RelayCommand]
     private async Task StopAllDrivers()
     {
-        await ExecuteAsync(async () =>
+        await ExecuteAsync(() =>
         {
-            Device currDevice = new();
-            List<Device> devicesForUpdating = [..Devices];
-            foreach (var device in devicesForUpdating)
+            var files = GetDriversToStart();
+          
+            try
             {
-                if (device.device_status == 1)
-                {
-                    try
-                    {
-                        var currDriver = Drivers.FirstOrDefault(p => p.driver_id == device.device_driver_id);
-                        if (currDriver != null) _driverManager.StopDriverByName(currDriver.driver_name);
-                        currDevice.device_id = device.device_id;
-                        currDevice.device_name = device.device_name;
-                        currDevice.device_status = 0;
-                        currDevice.device_driver_id = device.device_driver_id;
-                        await UpdateDeviceStatusAsync(currDevice);
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception();
-                    }
-
-                }
+                _driverManager.StopAllDrivers(files);
+                _driverManager.DeleteDriversFromDirectory();
             }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+
+            return Task.CompletedTask;
         });
+        CheckAllDriversForRunning();
+        await Shell.Current.DisplayAlert("Drivers stopped", "Drivers for devices are successfully stopped.", "Ok");
     }
 
     [RelayCommand]
@@ -77,10 +70,7 @@ public partial class MainPageViewModel : ObservableObject
                 Drivers.Clear();
                 foreach (var driver in enumerable)
                 {
-                    if (Drivers.FirstOrDefault(p=>p.driver_id == driver.driver_id) == null)
-                    {
-                        Drivers.Add(driver);
-                    }
+                    Drivers.Add(driver);
                 }
             }
         });
@@ -89,40 +79,34 @@ public partial class MainPageViewModel : ObservableObject
     [RelayCommand]
     private async Task RunDriversForDevices()
     {
-        await ExecuteAsync(async () =>
+        _driverManager.LoadDriversToDirectory();
+        await ExecuteAsync(() =>
         {
-            Device currDevice = new();
-            List<Device> devicesForUpdating = [..Devices];
-            foreach (var device in devicesForUpdating)
+            var files = GetDriversToStart();
+            try
             {
-                if (device.device_status == 0){
-                    try
-                    {
-                        var driver =
-                            Drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
-                        if (driver != null)
-                        {
-                            _driverManager.StartDriverByName(driver.driver_name);
-                            currDevice.device_status = 1;
-                        }
-                        else
-                        {
-                            currDevice.device_status = 0;
-
-                        }
-
-                        currDevice.device_driver_id = device.device_driver_id;
-                        currDevice.device_id = device.device_id;
-                        currDevice.device_name = device.device_name;
-                        await UpdateDeviceStatusAsync(currDevice);
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception();
-                    }
-                }
+                _driverManager.StartAllDrivers(files);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return Task.CompletedTask;
         });
+        CheckAllDriversForRunning();
+        await Shell.Current.DisplayAlert("Drivers are running", "Drivers for devices are successfully started.", "Ok");
+    }
+
+    private List<string> GetDriversToStart()
+    {
+        List<Device> devicesForUpdating = [..Devices];
+        List<string> files = new();
+        foreach (var device in devicesForUpdating)
+        {
+            var driver = Drivers.FirstOrDefault(predicate => predicate.driver_id == device.device_driver_id);
+            if (driver != null) files.Add(driver.driver_name);
+        }
+        return files;
     }
     
     public async Task LoadDevicesAsync()
@@ -138,6 +122,7 @@ public partial class MainPageViewModel : ObservableObject
                 {
                     if (Devices.FirstOrDefault(p=>p.device_id == device.device_id) == null)
                     {
+                        device.device_status = false;
                         Devices.Add(device);
                     }
                 }
@@ -185,6 +170,42 @@ public partial class MainPageViewModel : ObservableObject
         }
     }
 
+    public void CheckAllDriversForRunning()
+    {
+        var files = GetDriversToStart();
+        try
+        {
+            Parallel.ForEach(files, CheckOneDeviceForRunning);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void CheckOneDeviceForRunning(string driverName)
+    {
+        try
+        {
+            var index = -1;
+            var driver = Drivers.FirstOrDefault(driver => driver.driver_name == driverName);
+           var currDevice = Devices.FirstOrDefault(p => driver != null && p.device_driver_id == driver.driver_id);
+           if (currDevice != null)
+           {
+               lock(_lockObject){
+                   index = Devices.IndexOf(currDevice);
+                   Devices.RemoveAt(index);
+                   var result = _driverManager.IsDriverRunning(driverName);
+                   currDevice.device_status = result;
+                   Devices.Insert(index, currDevice);
+               }
+           }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
     
     [RelayCommand]
     private async Task NavigateToAddDeviceAsync()

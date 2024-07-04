@@ -4,7 +4,7 @@ namespace DriverTracker.Views;
 
 public partial class DeviceDetailsPage
 {
-    private DeviceDetailsViewModel _viewModel = new();
+    private readonly DeviceDetailsViewModel _viewModel = new();
     public DeviceDetailsPage()
     {
         InitializeComponent();
@@ -13,6 +13,7 @@ public partial class DeviceDetailsPage
 
     protected override async void OnAppearing()
     {
+        base.OnAppearing();
         await _viewModel.LoadDevicesAsync();
         await _viewModel.LoadDriversAsync();
     }

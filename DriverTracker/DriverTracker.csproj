@@ -23,10 +23,12 @@
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Maui" Version="9.0.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.0-preview.5.24306.3" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0"/>
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+        <PackageReference Include="System.Reactive" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -40,6 +42,16 @@
         <DependentUpon>SighUpPage.xaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Resources\Database\DriverTrackerDB.db">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Drivers\Logs\" />
     </ItemGroup>
 
 </Project>

@@ -62,15 +62,20 @@ public partial class AddDeviceViewModel : ObservableObject
         {
             try
             {
-               // _chosenDriver.driver_name = _selectedDriverNameFromPicker;
-               if (Drivers.FirstOrDefault(p => p.driver_name == ChosenDriver.driver_name
-                                                &&  p.driver_ip == ChosenDriver.driver_ip
-                                                && p.driver_port == ChosenDriver.driver_port) == null)
+                var currDriver = Drivers.FirstOrDefault(p => p.driver_name == ChosenDriver.driver_name);
+               if (currDriver.driver_ip != ChosenDriver.driver_ip || currDriver.driver_port != ChosenDriver.driver_port)
                {
-                   await _context.AddItemAsync(ChosenDriver);
-                   Drivers.Add(ChosenDriver);
-                   NewDevice.device_driver_id = Drivers.Count;
-                  
+                   ChosenDriver.driver_id = currDriver.driver_id;
+                   await _context.UpdateItemAsync(ChosenDriver);
+                   var oldDriver = Drivers.FirstOrDefault(p=>p.driver_id == ChosenDriver.driver_id);
+                   if (oldDriver != null)
+                   {
+                       int index = Drivers.IndexOf(oldDriver);
+                       Drivers.RemoveAt(index);
+                       Drivers.Insert(index, ChosenDriver.Clone());
+                       NewDevice.device_driver_id = Drivers.Count;
+                   }
+
                }
                else
                {
