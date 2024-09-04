@@ -17,6 +17,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
 
     [ObservableProperty] private ObservableCollection<Device> _devices = new();
     [ObservableProperty] private ObservableCollection<Driver> _drivers = new();
+    [ObservableProperty] private string _driver_logs = String.Empty;
     private readonly DriverManager _driverManager = new();
     private readonly AppDbContext _context = new ();
     
@@ -38,6 +39,9 @@ public partial class DeviceDetailsViewModel:ObservableObject
                 {
                     if (Device.device_id == device.device_id)
                     {
+                        _driverManager.      
+                            StopDriverByName(Driver.driver_name);
+
                         Devices.Remove(device);
                         await _context.DeleteItemAsync(Device);
                         await Shell.Current.GoToAsync(nameof(MainPage), true);
@@ -47,7 +51,23 @@ public partial class DeviceDetailsViewModel:ObservableObject
             
         });
     }
+
     
+    private void OutputLogsFromfile()
+    {
+        using StreamReader streamReader =
+            new StreamReader(Path.Combine(_driverManager._driversPath, "Logs", Driver.driver_name + "_log.txt"));
+        try
+        {
+            var output = streamReader.ReadToEnd();
+            if(output != null) Driver_logs = output;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
     
     public async Task LoadDevicesAsync()
     {
@@ -65,6 +85,7 @@ public partial class DeviceDetailsViewModel:ObservableObject
             }
             
         });
+        OutputLogsFromfile();
     }
     
     private async Task ExecuteAsync(Func<Task> operation, string? busyText = null)

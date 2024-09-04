@@ -7,13 +7,13 @@
     
     <ContentPage.Content>
         <StackLayout BackgroundColor="#e6e6e6">
-           <ScrollView Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="400">
+           <ScrollView Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="440">
                 <Grid>
                     <StackLayout Padding="0" Margin="0" HorizontalOptions="FillAndExpand">
                      <Frame HeightRequest="150" BackgroundColor="CadetBlue" Padding="0" Margin="0"/>
                     </StackLayout>
                     <StackLayout Padding="0" Margin="10,60,10,0" HorizontalOptions="FillAndExpand">
-                        <Frame  BackgroundColor="White" HeightRequest="400" HasShadow="True" Padding="0" Margin="0">
+                        <Frame  BackgroundColor="White" HeightRequest="440" HasShadow="True" Padding="0" Margin="0">
                             <StackLayout>
                                 <StackLayout Margin="10">
                                     <Label Text="SIGN UP" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="CenterAndExpand" FontAttributes="Bold"/>

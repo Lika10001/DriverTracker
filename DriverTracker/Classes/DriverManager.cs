@@ -9,7 +9,7 @@ namespace DriverTracker.Classes;
 public class DriverManager
 {
     private readonly Dictionary<string, Process> _runningProcesses = new();
-    private readonly string _driversPath = GetCorrectPath();
+    public readonly string _driversPath = GetCorrectPath();
     private readonly object _startDriverLock = new();
     private List<Task> _tasks = new ();
     
@@ -19,7 +19,9 @@ public class DriverManager
         //var files = Directory.GetFiles(_driversPath, "*.exe");
         try
         {
-            Parallel.ForEach(files, StartDriverByName);
+            //Parallel.ForEach(files, StartDriverByName);
+            foreach(var file in files)
+                StartDriverByName(file);
             await Task.WhenAll(_tasks);
         }
         catch (Exception ex)
@@ -176,34 +178,49 @@ public class DriverManager
                     {
                         //log file name = name of exe + _log.exe
                         //thread name = name of exe +_writer
-                        
+                        var command = exeFilePath;
                         ProcessStartInfo startInfo = new ProcessStartInfo
                         {
-                            FileName = exeFilePath,
+                            FileName = "C:\\Windows\\System32\\cmd.exe",
                             UseShellExecute = false,
                             CreateNoWindow = true,
                             RedirectStandardOutput = true,
-                            RedirectStandardError = true
+                            RedirectStandardError = true,
+                           Arguments = "/c " + command
                         };
                         var process = Process.Start(startInfo);
                         string logFilePath = Path.Combine(_driversPath, "Logs", exeName + "_log.txt");
+
+                        StreamReader stream = null;
+                        if (process != null)
+                        {
+                             stream = new StreamReader(process.StandardError.BaseStream);
+                        
+                        }
+                        
                         if (process != null)
                         {
                             try
                             {
                                 using FileStream fileStream = new FileStream(logFilePath, FileMode.Append,
                                     FileAccess.Write, FileShare.Read);
-                                StreamPipe pout = new StreamPipe(process.StandardOutput.BaseStream,
-                                    fileStream);
+                                    //StreamPipe pout = new StreamPipe(process.StandardOutput.BaseStream,
+                                   // fileStream);
                                 StreamPipe perr = new StreamPipe(process.StandardError.BaseStream,
                                     fileStream);
-                                pout.Connect();
+                               // pout.Connect();
                                 perr.Connect();
                             
                                 _tasks.Add(Task.Run(() =>
                                 {
                                     process.WaitForExit();
-                                    pout.Disconnect();
+                                  //  pout.Disconnect();
+                                  var stream = new StreamReader(process.StandardError.BaseStream);
+                                  var str = stream.ReadToEnd();
+                                  byte[] input = Encoding.Default.GetBytes(str);
+                                  using FileStream fileStream = new FileStream(logFilePath, FileMode.Append,
+                                      FileAccess.Write, FileShare.Read);
+                                  fileStream.WriteAsync(input, 0, input.Length);
                                     perr.Disconnect();
                                     Console.WriteLine($"Process exited with code: {process.ExitCode}");
                                     Console.WriteLine($"Standard output and error written to: {logFilePath}");
@@ -313,7 +330,7 @@ public class DriverManager
             Destination = destination;
         }
 
-        public StreamPipe Connect()
+        public void Connect()
         {
             _cancellationToken = new CancellationTokenSource();
             _worker = Task.Run(async () =>
@@ -329,7 +346,6 @@ public class DriverManager
                     await Destination.FlushAsync(_cancellationToken.Token);
                 }
             }, _cancellationToken.Token);
-            return this;
         }
 
         public void Disconnect()

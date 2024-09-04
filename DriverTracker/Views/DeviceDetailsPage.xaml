@@ -18,84 +18,99 @@
         <StackLayout HorizontalOptions="FillAndExpand">
             <Grid>
                 <StackLayout>
-                    <Frame  BackgroundColor="PeachPuff" HeightRequest="550" HasShadow="True" Padding="0" Margin="0,150,0,0">
+                    <Frame  BackgroundColor="PeachPuff" HeightRequest="650" HasShadow="True" Padding="0" Margin="0,0,0,0">
                         <Image Source="main_devices.jpg" Aspect="AspectFill"/>
                     </Frame>
                </StackLayout>
                 <StackLayout HorizontalOptions="FillAndExpand">
-                    <StackLayout>
-                    <Grid RowDefinitions="Auto, Auto, *">
-                            <BoxView
-                                BackgroundColor="CadetBlue"
-                                Grid.RowSpan="2"
-                                HorizontalOptions="Fill"
-                                VerticalOptions="Fill"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackLayout Grid.Column="0" Margin="0,20,0,0" >
+                            <StackLayout>
+                                <Frame BackgroundColor="CadetBlue" HeightRequest="500" Margin ="0,20,0,0" WidthRequest="400" BorderColor="DarkGray"  HorizontalOptions="Center" CornerRadius="50">
+                                    <StackLayout>
+                                        <StackLayout>
+                                            <Grid RowDefinitions="Auto, Auto, *">
+                                            <Border StrokeShape="RoundRectangle 80"
+                                                    Stroke="White"
+                                                    StrokeThickness="6"
+                                                    HeightRequest="172"
+                                                    WidthRequest="172"
+                                                    Margin="0,8,0,0"
+                                                    HorizontalOptions="Center"
+                                                    VerticalOptions="Center">
+                                                <Image Aspect="AspectFill"
+                                                       HeightRequest="160"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"
+                                                       Source="one_device.jpg"
+                                                       WidthRequest="160"/>
+                                            </Border>
 
-                            <Border StrokeShape="RoundRectangle 80"
-                                    Stroke="White"
-                                    StrokeThickness="6"
-                                    HeightRequest="172"
-                                    WidthRequest="172"
-                                    Margin="0,8,0,0"
-                                    HorizontalOptions="Center"
-                                    VerticalOptions="Center">
-                                <Image Aspect="AspectFill"
-                                       HeightRequest="160"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       Source="one_device.jpg"
-                                       WidthRequest="160"/>
-                            </Border>
+                                            <Label Grid.Row="1"
+                                                   TextColor="White"
+                                                   FontAttributes="Bold"
+                                                   FontSize= "22"
+                                                   Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_name}" 
+                                                   HorizontalOptions="Center"
+                                                  />
+                                        </Grid>
+                                      </StackLayout>
+                                        <VerticalStackLayout>
+                                    <Frame BackgroundColor="White" HeightRequest="350" WidthRequest="400" BorderColor="DarkGray" Margin="0,20,0,0" HorizontalOptions="Center" CornerRadius="0">
+                                            <StackLayout HorizontalOptions="FillAndExpand">
+                                            <HorizontalStackLayout HorizontalOptions="Center">
+                                                <Label Text="Device info:" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
+                                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_info}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                            </HorizontalStackLayout>
+                                            
+                                            <HorizontalStackLayout HorizontalOptions="Center">
+                                                <Label Text="Is device on" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
+                                                <Label Text="{Binding Source ={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_status, Converter={StaticResource StatusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                            </HorizontalStackLayout>
+                                            
+                                            <HorizontalStackLayout HorizontalOptions="Center">
+                                                <Button Text="Run Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=RunDeviceCommand}" BackgroundColor="LimeGreen" TextColor="White" CornerRadius="30" Padding="10,0,10,0" Margin="0, 15, 15, 0" />
+                                                <Button Text="Stop Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=StopDeviceCommand}" BackgroundColor="IndianRed" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
+                                            </HorizontalStackLayout>
 
-                            <Label Grid.Row="1"
-                                   TextColor="White"
-                                   FontAttributes="Bold"
-                                   FontSize= "22"
-                                   Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_name}" 
-                                   HorizontalOptions="Center"
-                                   Margin="0,0,0,8"/>
-                        </Grid>
-                    </StackLayout>   
-                    <Frame BackgroundColor="White" HeightRequest="400" WidthRequest="400" BorderColor="DarkGray" Padding="10,10,10,10" Margin="0,20,0,0" HorizontalOptions="Center" CornerRadius="50">
-                    <ScrollView HeightRequest="400" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                        <StackLayout HorizontalOptions="FillAndExpand">
-                            <HorizontalStackLayout HorizontalOptions="Center">
-                                <Label Text="Device info:" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
-                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_info}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                            </HorizontalStackLayout>
-                            
-                            <HorizontalStackLayout HorizontalOptions="Center">
-                                <Label Text="Is device on" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
-                                <Label Text="{Binding Source ={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Device.device_status, Converter={StaticResource StatusConverter}}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                            </HorizontalStackLayout>
-                            
-                            <HorizontalStackLayout HorizontalOptions="Center">
-                                <Button Text="Run Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=RunDeviceCommand}" BackgroundColor="LimeGreen" TextColor="White" CornerRadius="30" Padding="10,0,10,0" Margin="0, 15, 15, 0" />
-                                <Button Text="Stop Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=StopDeviceCommand}" BackgroundColor="IndianRed" TextColor="White" CornerRadius="30" Margin="0, 15, 0, 0" />
-                            </HorizontalStackLayout>
-
-                            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,5,0">
-                                <Label Text="Driver ip is"  FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Driver.driver_ip}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                            </HorizontalStackLayout>
-                    
-                            <HorizontalStackLayout HorizontalOptions="Center">
-                                <Label Text="Driver port is" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
-                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Driver.driver_port}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
-                            </HorizontalStackLayout>
-                            
-                            <HorizontalStackLayout Padding="30,0,30,0" Margin="10, 15, 10, 0" HorizontalOptions="Center">
-                                <Button Text="Ok" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=GoBackToMainPageCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30"  />
-                                <Button Text="Edit Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=EditDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" />
-                                <Button Text="Delete Device" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=DeleteDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" />
-                            </HorizontalStackLayout>
-                            <VerticalStackLayout Margin="10">
-                                <Label Text="Logs" FontSize= "20" TextColor="CadetBlue" HorizontalOptions="Center" FontAttributes="Bold"/>
-                                <Label Text ="logss" HeightRequest="150"  />
-                            </VerticalStackLayout>
+                                            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,15,5,0">
+                                                <Label Text="Driver ip is"  FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                                <Label Margin ="5,0,0,0" Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Driver.driver_ip}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                            </HorizontalStackLayout>
+                                    
+                                            <HorizontalStackLayout HorizontalOptions="Center">
+                                                <Label Text="Driver port is" FontSize= "22" TextColor="CadetBlue" HorizontalOptions="FillAndExpand" FontAttributes="Bold" Margin="0,0,5,0"/>
+                                                <Label Text="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=Driver.driver_port}" FontSize= "22" TextColor="Green" HorizontalOptions="FillAndExpand" FontAttributes="Bold"/>
+                                            </HorizontalStackLayout>
+                                         </StackLayout>
+                                    </Frame>
+                                            </VerticalStackLayout>
+                                    </StackLayout>
+                                </Frame>
+                                <HorizontalStackLayout Padding="10,0,10,0" Margin="10, 15, 10, 0" HorizontalOptions="Center">
+                                    <Button Text="Ok" FontSize="22" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=GoBackToMainPageCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30"  />
+                                    <Button Text="Edit Device" FontSize="22" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=EditDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" />
+                                    <Button Text="Delete Device" FontSize="22" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceDetailsViewModel}}, Path=DeleteDeviceCommand}" BackgroundColor="CadetBlue" TextColor="White" CornerRadius="30" />
+                                </HorizontalStackLayout>
                             </StackLayout>
-                   </ScrollView>
-                    </Frame>
+                        </StackLayout>
+                        <StackLayout Grid.Column="1" Margin="20, 20, 20, 0">
+                            <Frame BackgroundColor="CadetBlue" HeightRequest="550" WidthRequest="500" BorderColor="DarkGray" Padding="10,10,10,10" Margin="0,20,0,0" HorizontalOptions="Center" CornerRadius="50">
+                                <VerticalStackLayout Margin="10">
+                                    <Label Text="Logs" FontSize= "20" TextColor="White" HorizontalOptions="Center" FontAttributes="Bold"/>
+                                    <Frame BackgroundColor="White" HeightRequest="450" WidthRequest="500" BorderColor="DarkGray" Padding="0,10,0,10" Margin="0,20,0,0" HorizontalOptions="Center" CornerRadius="0">
+                                       <ScrollView HeightRequest="400">
+                                        <Label Text ="{Binding Driver_logs}" HeightRequest="400" TextColor="CadetBlue" Margin="10,0,10,0"/>
+                                        </ScrollView>
+                                    </Frame>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </StackLayout>
+                    </Grid>
                 </StackLayout>
             </Grid>
         </StackLayout>

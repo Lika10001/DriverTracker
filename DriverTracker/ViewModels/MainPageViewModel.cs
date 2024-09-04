@@ -128,6 +128,7 @@ public partial class MainPageViewModel : ObservableObject
                 }
             }
         });
+        //_driverManager.SaveDriverToDb("drv6", "0.0.0.6", 6);
     }
     
     private async Task UpdateDeviceStatusAsync(Device device)

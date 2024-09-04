@@ -1,0 +1,3 @@
+  File "drv1.py", line 5, in <module>
+ZeroDivisionError: division by zero
+[15332] Failed to execute script 'drv1' due to unhandled exception!
